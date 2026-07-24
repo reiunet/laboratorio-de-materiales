@@ -1,0 +1,131 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+
+const navItems = [
+    { href: "/", label: "Inicio" },
+    { href: "/materiales", label: "Materiales" },
+    { href: "/procesos", label: "Procesos" },
+    { href: "/acerca", label: "Acerca del Lab" },
+];
+
+const isActive = (path: string) => {
+    if (path === "/" && pathname === "/") return true;
+    if (path !== "/" && pathname.startsWith(path)) return true;
+    return false;
+};
+---
+
+<header
+    class="sticky top-0 z-50 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-opacity-95"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Brand / Logo -->
+            <a href="/" class="flex items-center gap-3 group">
+                <div
+                    class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-md group-hover:bg-blue-500 transition-colors"
+                >
+                    L051
+                </div>
+                <div class="flex flex-col">
+                    <span
+                        class="font-bold text-base leading-tight tracking-tight"
+                        >Lab. Materials</span
+                    >
+                    <span
+                        class="text-[10px] text-slate-400 font-medium tracking-wider"
+                        >UNET</span
+                    >
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-1">
+                {
+                    navItems.map((item) => (
+                        <a
+                            href={item.href}
+                            class={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                                isActive(item.href)
+                                    ? "bg-blue-600 text-white shadow-sm"
+                                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                            }`}
+                        >
+                            {item.label}
+                        </a>
+                    ))
+                }
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button
+                id="menu-toggle"
+                type="button"
+                class="md:hidden p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Abrir menú de navegación"
+            >
+                <svg
+                    id="icon-open"
+                    class="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg
+                    id="icon-close"
+                    class="w-6 h-6 hidden"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div
+        id="mobile-menu"
+        class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-2 pb-4 space-y-1"
+    >
+        {
+            navItems.map((item) => (
+                <a
+                    href={item.href}
+                    class={`block px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
+                        isActive(item.href)
+                            ? "bg-blue-600 text-white"
+                            : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                    }`}
+                >
+                    {item.label}
+                </a>
+            ))
+        }
+    </div>
+</header>
+
+<script>
+    // Control simple del menú desplegable móvil
+    const toggleBtn = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const iconOpen = document.getElementById("icon-open");
+    const iconClose = document.getElementById("icon-close");
+
+    toggleBtn?.addEventListener("click", () => {
+        const isHidden = mobileMenu?.classList.toggle("hidden");
+        iconOpen?.classList.toggle("hidden", !isHidden);
+        iconClose?.classList.toggle("hidden", isHidden);
+    });
+</script>

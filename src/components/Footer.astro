@@ -1,0 +1,46 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer
+    class="bg-slate-900 text-slate-400 border-t border-slate-800 text-sm mt-auto"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <!-- Columna 1: Info Institucional -->
+            <div class="space-y-1 text-center md:text-left">
+                <p class="text-white font-semibold">
+                    Laboratorio de Materiales L051
+                </p>
+                <p class="text-xs text-slate-400">
+                    Universidad Nacional Experimental del Táchira (UNET)
+                </p>
+                <p class="text-xs text-slate-500">San Cristóbal, Venezuela</p>
+            </div>
+
+            <!-- Columna 2: Enlaces Rápidos -->
+            <div class="flex justify-center space-x-6 text-xs font-medium">
+                <a href="/materiales" class="hover:text-white transition-colors"
+                    >Catálogo de Aceros</a
+                >
+                <a href="/procesos" class="hover:text-white transition-colors"
+                    >Prácticas y Videos</a
+                >
+                <a href="/acerca" class="hover:text-white transition-colors"
+                    >Información del Lab</a
+                >
+            </div>
+
+            <!-- Columna 3: Créditos del Proyecto -->
+            <div
+                class="text-center md:text-right text-xs text-slate-500 space-y-0.5"
+            >
+                <p>Servicio Comunitario UNET</p>
+                <p class="text-slate-400 font-medium">
+                    Desarrollado por Reinaldo B. Maestre
+                </p>
+                <p>© {currentYear} UNET. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>

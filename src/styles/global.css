@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  /* COLORES PRINCIPALES */
+  --color-brand-primary: #2563eb;      /* Azul Técnico*/
+  --color-brand-primary-hover: #1d4ed8;/* Azul Oscuro Hover*/
+  --color-brand-accent: #f59e0b;       /* Ámbar Industrial*/
+  --color-brand-accent-hover: #d97706; /* Ámbar Oscuro Hover*/
+  --color-brand-border: #e2e8f0;       /* Gris Borde/Acero*/
+
+  /* GAMA BLANCOS Y CLAROS */
+  --color-brand-surface: #ffffff;      /* Blanco Puro */
+  --color-brand-bg: #f8fafc;           /* Fondo General Claro */
+
+  /* GAMA NEGROS Y OSCUROS                     */
+  --color-brand-dark: #0f172a;         /* Titulares H1-H3 */
+  --color-brand-body: #475569;         /* Texto de Lectura */
+  --color-brand-muted: #94a3b8;        /* Texto Secundario/Detalles */
+}

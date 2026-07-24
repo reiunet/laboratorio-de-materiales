@@ -1,0 +1,180 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import MaterialesSidebar from "../../components/MaterialesSidebar.astro";
+import { MATERIALES_MOCK, type Material } from "../../data/materiales";
+
+export function getStaticPaths() {
+    return MATERIALES_MOCK.map((mat) => ({
+        params: { slug: mat.slug },
+        props: { material: mat },
+    }));
+}
+
+interface Props {
+    material: Material;
+}
+
+const { material } = Astro.props;
+
+// Construimos las filas dinámicamente según la data del objeto
+const propiedadesTecnicas = [
+    {
+        etiqueta: "Clasificación del material (ISO)",
+        valor: `${material.clasificacion_iso} (${material.categoria})`,
+    },
+    {
+        etiqueta: "Norma equivalente (AISI/SAE)",
+        valor: material.norma_aisi_sae,
+    },
+    { etiqueta: "Norma DIN / EN", valor: material.norma_din_en },
+    {
+        etiqueta: "Número de Material (W.Nr.)",
+        valor: material.numero_material_wnr,
+    },
+    {
+        etiqueta: "Estado de entrega de la probeta",
+        valor: material.estado_entrega_probeta,
+    },
+    {
+        etiqueta: "Dureza máxima en recocido (HB)",
+        valor: material.dureza_max_recocido_hb,
+    },
+    { etiqueta: "Maquinabilidad", valor: material.maquinabilidad },
+    { etiqueta: "Soldabilidad", valor: material.soldabilidad },
+    {
+        etiqueta: "Código de color comercial (Ferrum)",
+        valor: material.codigo_color_ferrum,
+    },
+];
+---
+
+<Layout title={material.nombre}>
+    <div class="flex flex-col lg:flex-row gap-8 items-start py-4">
+        <!-- Sidebar Izquierdo -->
+        <MaterialesSidebar currentSlug={material.slug} />
+
+        <!-- Card Única del Material -->
+        <article
+            class="flex-grow max-w-4xl w-full bg-white rounded-xl border border-brand-border shadow-xs overflow-hidden p-6 sm:p-8 space-y-10"
+        >
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Columna Izquierda (Aprox 45-50% -> col-span-7) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <h1
+                        class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight"
+                    >
+                        {material.nombre}
+                    </h1>
+
+                    <div
+                        class="space-y-4 text-sm text-brand-body leading-relaxed"
+                    >
+                        <div>
+                            <strong
+                                class="block text-brand-dark font-bold text-base mb-1"
+                                >Composición Química:</strong
+                            >
+                            <p>{material.composicion_quimica}</p>
+                        </div>
+
+                        <div>
+                            <strong
+                                class="block text-brand-dark font-bold text-base mb-1"
+                                >Estado de Entrega:</strong
+                            >
+                            <p>
+                                {material.estado_entrega_probeta}. Su dureza en
+                                estado recocido es de máximo {
+                                    material.dureza_max_recocido_hb
+                                }.
+                            </p>
+                        </div>
+
+                        <div>
+                            <strong
+                                class="block text-brand-dark font-bold text-base mb-1"
+                                >Aplicaciones:</strong
+                            >
+                            <p>{material.aplicaciones}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha (Aprox 35-40% -> col-span-5) -->
+                <div class="lg:col-span-5 space-y-3">
+                    <!-- Foto ocupando todo el ancho de la columna -->
+                    <div
+                        class="w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-brand-border bg-slate-100"
+                    >
+                        <img
+                            src={material.imagenes_muestra[0] ||
+                                "https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&w=600&q=80"}
+                            alt={`Fotografía de ${material.nombre}`}
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+
+                    <!-- Opciones de Descarga (Uno al lado del otro) -->
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button
+                            type="button"
+                            class="w-full px-3 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-1.5 text-center"
+                        >
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                ></path>
+                            </svg>
+                            <span>Ficha Técnica</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="w-full px-3 py-2 bg-slate-100 hover:bg-slate-200 text-brand-dark border border-brand-border text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center"
+                        >
+                            <svg
+                                class="w-4 h-4 text-brand-body"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+                                ></path>
+                            </svg>
+                            <span>Descargar QR</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="divide-y divide-brand-border border-t border-b border-brand-border"
+            >
+                {
+                    propiedadesTecnicas.map((prop) => (
+                        <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
+                            <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
+                                {prop.etiqueta}
+                            </span>
+                            <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
+                                {prop.valor}
+                            </span>
+                        </div>
+                    ))
+                }
+            </div>
+        </article>
+    </div>
+</Layout>

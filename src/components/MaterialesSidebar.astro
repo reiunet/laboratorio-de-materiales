@@ -1,0 +1,52 @@
+---
+import { MATERIALES_MOCK } from '../data/materiales';
+
+interface Props {
+  currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
+---
+
+<aside class="w-full lg:w-64 flex-shrink-0 space-y-4">
+  <!-- Encabezado y total sin contenedor box -->
+  <div class="flex items-center justify-between pb-2 border-b border-brand-border">
+    <h2 class="text-sm font-bold text-brand-dark uppercase tracking-wider">Aceros y Muestras</h2>
+    <span class="text-xs font-mono font-semibold px-2 py-0.5 bg-slate-200/70 text-brand-dark rounded-full">
+      {MATERIALES_MOCK.length}
+    </span>
+  </div>
+
+  <!-- Buscador Integrado al fondo -->
+  <div class="relative">
+    <input
+      type="text"
+      placeholder="Buscar por código..."
+      class="w-full px-3 py-2 text-xs bg-white border border-brand-border rounded-lg text-brand-dark placeholder:text-brand-muted focus:outline-none focus:border-brand-primary transition-colors shadow-xs"
+    />
+  </div>
+
+  <!-- Lista de Materiales integrada al cuerpo -->
+  <nav class="space-y-0.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+    {MATERIALES_MOCK.map((item) => {
+      const isSelected = item.slug === currentSlug;
+      return (
+        <a
+          href={`/materiales/${item.slug}`}
+          class={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all group ${
+            isSelected
+              ? 'bg-brand-primary text-white font-semibold shadow-xs'
+              : 'text-brand-dark hover:bg-slate-200/60 hover:text-brand-dark'
+          }`}
+        >
+          <!-- Indicador de color -->
+          <span
+            class="w-2.5 h-2.5 rounded-full flex-shrink-0 border border-black/20"
+            style={`background-color: ${item.color_identificacion};`}
+          />
+          <span class="truncate">{item.nombre}</span>
+        </a>
+      );
+    })}
+  </nav>
+</aside>
