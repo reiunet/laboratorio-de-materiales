@@ -1,0 +1,113 @@
+---
+import { supabase } from '../../lib/supabase';
+
+// Simple Cookie check for protection
+const accessToken = Astro.cookies.get('sb-access-token');
+if (!accessToken) {
+  return Astro.redirect('/login');
+}
+
+let message = '';
+
+// Handle Create / Delete Actions via Form submissions
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const action = formData.get('action');
+
+  if (action === 'create') {
+    const newMaterial = {
+      slug: formData.get('slug'),
+      nombre: formData.get('nombre'),
+      categoria: formData.get('categoria'),
+      color_identificacion: formData.get('color_identificacion'),
+      composicion_quimica: formData.get('composicion_quimica'),
+      aplicaciones: formData.get('aplicaciones'),
+      norma_aisi_sae: formData.get('norma_aisi_sae'),
+      video_url: formData.get('video_url'),
+      imagenes_muestra: [formData.get('imagen_url')]
+    };
+
+    const { error } = await supabase.from('materials').insert([newMaterial]);
+    if (error) message = `Error al crear: ${error.message}`;
+    else message = '¡Material agregado exitosamente!';
+  } 
+  
+  if (action === 'delete') {
+    const id = formData.get('id');
+    const { error } = await supabase.from('materials').delete().eq('id', id);
+    if (error) message = `Error al eliminar: ${error.message}`;
+    else message = 'Material eliminado.';
+  }
+}
+
+// Fetch current materials list
+const { data: materials, error: fetchError } = await supabase
+  .from('materials')
+  .select('*')
+  .order('created_at', { ascending: false });
+---
+
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Panel Admin - Materiales</title>
+</head>
+<body style="font-family: sans-serif; padding: 2rem; max-width: 1000px; margin: auto;">
+  <h1>Panel de Administración - Laboratorio</h1>
+  <p><a href="/login?logout=true">Cerrar Sesión</a></p>
+
+  {message && <p style="padding: 1rem; background: #e0ffe0; border: 1px solid #b2fab4;">{message}</p>}
+
+  <section style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+    <h3>Agregar Nuevo Material</h3>
+    <form method="POST" style="display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+      <input type="hidden" name="action" value="create" />
+      <input type="text" name="slug" placeholder="Slug (ej: sae-1045)" required style="padding: 0.5rem;" />
+      <input type="text" name="nombre" placeholder="Nombre (ej: SAE 1045)" required style="padding: 0.5rem;" />
+      <input type="text" name="categoria" placeholder="Categoría" style="padding: 0.5rem;" />
+      <input type="text" name="color_identificacion" placeholder="Color Identificación (Hex)" style="padding: 0.5rem;" />
+      <input type="text" name="composicion_quimica" placeholder="Composición química" style="padding: 0.5rem;" />
+      <input type="text" name="norma_aisi_sae" placeholder="Norma AISI/SAE" style="padding: 0.5rem;" />
+      <input type="text" name="aplicaciones" placeholder="Aplicaciones" style="grid-column: span 2; padding: 0.5rem;" />
+      <input type="text" name="imagen_url" placeholder="URL Imagen Muestra" style="padding: 0.5rem;" />
+      <input type="text" name="video_url" placeholder="URL Video (YouTube Embed)" style="padding: 0.5rem;" />
+      
+      <button type="submit" style="grid-column: span 2; padding: 0.75rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Guardar Material
+      </button>
+    </form>
+  </section>
+
+  <section>
+    <h3>Listado de Materiales Registrados</h3>
+    <table border="1" cellpadding="10" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: #eee;">
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Norma AISI/SAE</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {materials?.map((mat) => (
+          <tr>
+            <td>{mat.nombre}</td>
+            <td>{mat.categoria}</td>
+            <td>{mat.norma_aisi_sae}</td>
+            <td>
+              <form method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="delete" />
+                <input type="hidden" name="id" value={mat.id} />
+                <button type="submit" style="background: #dc3545; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 3px; cursor: pointer;">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+</body>
+</html>

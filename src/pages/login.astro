@@ -1,0 +1,65 @@
+---
+import { supabase } from '../lib/supabase';
+
+let errorMessage = '';
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const email = formData.get('email')?.toString();
+  const password = formData.get('password')?.toString();
+
+  if (email && password) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      errorMessage = error.message;
+    } else if (data.session) {
+      // Set the auth token in cookies so middleware can protect routes
+      Astro.cookies.set('sb-access-token', data.session.access_token, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+      });
+      Astro.cookies.set('sb-refresh-token', data.session.refresh_token, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+      });
+
+      return Astro.redirect('/admin');
+    }
+  }
+}
+---
+
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Login - Laboratorio de Materiales</title>
+</head>
+<body style="font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9;">
+  <form method="POST" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px;">
+    <h2>Acceso Panel Admin</h2>
+    {errorMessage && <p style="color: red; font-size: 0.9rem;">{errorMessage}</p>}
+    
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; margin-bottom: 0.5rem;">Email</label>
+      <input type="email" name="email" required style="width: 100%; padding: 0.5rem; box-sizing: border-box;" />
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; margin-bottom: 0.5rem;">Contraseña</label>
+      <input type="password" name="password" required style="width: 100%; padding: 0.5rem; box-sizing: border-box;" />
+    </div>
+
+    <button type="submit" style="width: 100%; padding: 0.75rem; background: #0070f3; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      Iniciar Sesión
+    </button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,254 @@
+---
+import { supabase } from '../../lib/supabase';
+
+const { slug } = Astro.params;
+
+// 1. Obtener la lista de TODOS los materiales para la barra lateral (30%)
+const { data: todosLosMateriales } = await supabase
+  .from('materials')
+  .select('slug, nombre')
+  .order('nombre', { ascending: true });
+
+// 2. Obtener la información completa del material ACTUAL (70%)
+const { data: material, error } = await supabase
+  .from('materials')
+  .select('*')
+  .eq('slug', slug)
+  .single();
+
+if (error || !material) {
+  return Astro.redirect('/materiales');
+}
+---
+
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{material.nombre} - Ficha Técnica</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+    
+    .layout-container { display: flex; min-height: 100vh; }
+    
+    /* Barra lateral izquierda (30%) */
+    .sidebar { width: 30%; background-color: #ffffff; border-right: 1px solid #e2e8f0; padding: 1.5rem; height: 100vh; position: sticky; top: 0; overflow-y: auto; }
+    .sidebar h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-top: 0; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; }
+    .sidebar ul { list-style: none; padding: 0; margin: 0; }
+    .sidebar li { margin-bottom: 0.25rem; }
+    .sidebar a { display: block; padding: 0.6rem 0.8rem; text-decoration: none; color: #334155; border-radius: 6px; font-weight: 500; transition: background 0.15s; }
+    .sidebar a:hover { background-color: #f1f5f9; }
+    .sidebar a.active { background-color: #2563eb; color: white; }
+
+    /* Área principal del contenido (70%) */
+    .content { width: 70%; padding: 2.5rem; overflow-y: auto; }
+    .header-card { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+    .color-box { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; flex-shrink: 0; }
+    
+    /* Formato de Ficha Técnica */
+    .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .data-item { background: white; padding: 1rem 1.25rem; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .data-item.full-width { grid-column: 1 / -1; }
+    .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 0.25rem; }
+    .value { font-size: 1rem; font-weight: 500; color: #0f172a; word-break: break-word; }
+    
+    /* Secciones multimedia */
+    .media-section { margin-top: 2rem; }
+    .media-section h3 { border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .gallery img { width: 100%; height: 180px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-top: 1rem; }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+    /* Estilos del Módulo QR al final de la página */
+    .qr-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: 480px;
+    }
+    .qr-card canvas {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+    }
+    .qr-info h4 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.05rem;
+      color: #0f172a;
+    }
+    .qr-info p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="layout-container">
+    
+    <!-- BARRA LATERAL (30%) -->
+    <aside class="sidebar">
+      <h2>Materiales ({todosLosMateriales?.length || 0})</h2>
+      <a href="/materiales" style="font-size: 0.85rem; color: #2563eb; margin-bottom: 1rem; display: inline-block;">← Volver al inicio</a>
+      <ul>
+        {todosLosMateriales?.map((item) => (
+          <li>
+            <a 
+              href={`/materiales/${item.slug}`} 
+              class={item.slug === slug ? 'active' : ''}
+            >
+              {item.nombre}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+
+    <!-- CONTENIDO DEL MATERIAL ACTUAL (70%) -->
+    <main class="content">
+      <div class="header-card">
+        {material.color_identificacion && (
+          <div class="color-box" style={`background-color: ${material.color_identificacion};`} title={`Color Ferrum: ${material.codigo_color_ferrum || 'N/A'}`}></div>
+        )}
+        <div>
+          <h1 style="margin: 0; font-size: 1.8rem;">{material.nombre}</h1>
+          <p style="margin: 0.25rem 0 0 0; color: #64748b;">{material.categoria || 'Sin categoría especificada'}</p>
+        </div>
+      </div>
+
+      <!-- VALORES Y DATOS DEL JSON / TABLA -->
+      <div class="data-grid">
+        <div class="data-item">
+          <div class="label">Slug</div>
+          <div class="value">{material.slug}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Norma AISI / SAE</div>
+          <div class="value">{material.norma_aisi_sae || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Norma DIN / EN</div>
+          <div class="value">{material.norma_din_en || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Número Material (WNr)</div>
+          <div class="value">{material.numero_material_wnr || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Clasificación ISO</div>
+          <div class="value">{material.clasificacion_iso || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Código Color Ferrum</div>
+          <div class="value">{material.codigo_color_ferrum || '-'}</div>
+        </div>
+
+        <div class="data-item full-width">
+          <div class="label">Composición Química</div>
+          <div class="value">{material.composicion_quimica || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Estado Entrega Probeta</div>
+          <div class="value">{material.estado_entrega_probeta || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Dureza Máx Recocido</div>
+          <div class="value">{material.dureza_max_recocido_hb || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Maquinabilidad</div>
+          <div class="value">{material.maquinabilidad || '-'}</div>
+        </div>
+
+        <div class="data-item">
+          <div class="label">Soldabilidad</div>
+          <div class="value">{material.soldabilidad || '-'}</div>
+        </div>
+
+        <div class="data-item full-width">
+          <div class="label">Aplicaciones</div>
+          <div class="value">{material.aplicaciones || '-'}</div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DE IMÁGENES -->
+      {material.imagenes_muestra && material.imagenes_muestra.length > 0 && (
+        <div class="media-section">
+          <h3>Micrografías / Muestras</h3>
+          <div class="gallery">
+            {material.imagenes_muestra.map((imgUrl: string) => (
+              <a href={imgUrl} target="_blank" rel="noopener noreferrer">
+                <img src={imgUrl} alt={`Muestra de ${material.nombre}`} loading="lazy" />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- SECCIÓN DE VIDEO -->
+      {material.video_url && (
+        <div class="media-section">
+          <h3>Video Demostrativo</h3>
+          <div class="video-container">
+            <iframe 
+              src={material.video_url} 
+              title={`Video demostrativo de ${material.nombre}`} 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      )}
+
+      <!-- TARJETA DEL CÓDIGO QR -->
+      <div class="qr-card">
+        <canvas id="qr-code"></canvas>
+        <div class="qr-info">
+          <h4>Acceso Rápido Móvil</h4>
+          <p>Escanea este código QR para abrir la ficha técnica de <strong>{material.nombre}</strong> directamente en tu dispositivo móvil.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- LIBRERÍA QR VÍA CDN Y SCRIPT DE GENERACIÓN DINÁMICA -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('qr-code');
+      if (canvas && window.QRCode) {
+        // Toma automáticamente la URL absoluta completa de la ventana actual
+        const currentUrl = window.location.href;
+        
+        window.QRCode.toCanvas(canvas, currentUrl, {
+          width: 120,
+          margin: 1,
+          color: {
+            dark: '#0f172a',
+            light: '#ffffff'
+          }
+        }, function (error) {
+          if (error) console.error('Error generando el código QR:', error);
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
