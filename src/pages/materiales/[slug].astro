@@ -4,7 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import MaterialesSidebar from "../../components/MaterialesSidebar.astro";
 import { getMaterialBySlug } from "../../data/materiales";
 
-// 1. Extraemos el slug directamente de los parámetros de la URL.
+// 1. Extraemos el slug directamente de los parámetros de la URL
 const { slug } = Astro.params;
 
 if (!slug) {
