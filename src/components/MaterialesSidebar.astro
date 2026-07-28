@@ -1,34 +1,36 @@
 ---
-import { MATERIALES_MOCK } from '../data/materiales';
+import { supabase } from '../lib/supabase';
 
 interface Props {
   currentSlug?: string;
 }
 
 const { currentSlug } = Astro.props;
+
+const { data: materiales, error } = await supabase
+  .from('materiales')
+  .select('id, nombre, slug, color_identificacion')
+  .order('nombre', { ascending: true });
+
+if (error) {
+  console.error('Error al obtener materiales:', error.message);
+}
+
+const listaMateriales = materiales || [];
 ---
 
-<aside class="w-full lg:w-64 flex-shrink-0 space-y-4">
-  <!-- Encabezado y total sin contenedor box -->
+<aside class="w-full lg:w-64 shrink-0 space-y-4">
+  <!-- Encabezado-->
   <div class="flex items-center justify-between pb-2 border-b border-brand-border">
     <h2 class="text-sm font-bold text-brand-dark uppercase tracking-wider">Aceros y Muestras</h2>
     <span class="text-xs font-mono font-semibold px-2 py-0.5 bg-slate-200/70 text-brand-dark rounded-full">
-      {MATERIALES_MOCK.length}
+      {listaMateriales.length}
     </span>
   </div>
 
-  <!-- Buscador Integrado al fondo -->
-  <div class="relative">
-    <input
-      type="text"
-      placeholder="Buscar por código..."
-      class="w-full px-3 py-2 text-xs bg-white border border-brand-border rounded-lg text-brand-dark placeholder:text-brand-muted focus:outline-none focus:border-brand-primary transition-colors shadow-xs"
-    />
-  </div>
-
-  <!-- Lista de Materiales integrada al cuerpo -->
+  <!-- Lista de Materiales -->
   <nav class="space-y-0.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
-    {MATERIALES_MOCK.map((item) => {
+    {listaMateriales.map((item) => {
       const isSelected = item.slug === currentSlug;
       return (
         <a
@@ -41,7 +43,7 @@ const { currentSlug } = Astro.props;
         >
           <!-- Indicador de color -->
           <span
-            class="w-2.5 h-2.5 rounded-full flex-shrink-0 border border-black/20"
+            class="w-2.5 h-2.5 rounded-full shrink-0 border border-black/20"
             style={`background-color: ${item.color_identificacion};`}
           />
           <span class="truncate">{item.nombre}</span>

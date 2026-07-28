@@ -1,152 +1,16 @@
-import type { Material } from '../types/material';
+// src/data/materiales.ts
+import { supabase } from '../lib/supabase'; // Tu cliente de Supabase
 
-export const materiales: Material[] = [
-  {
-    slug: "sae-1045-c8",
-    nombre: "SAE 1045",
-    categoria: "Aceros al carbono / aleados",
-    codigo_laboratorio: "C8",
-    diametro_pulgadas: "½",
-    color_identificacion: "Blanco",
-    codigo_color_ferrum: "Blanco",
-    composicion_quimica: "C: 0.43–0.50%, Si: 0.10–0.20%, Mn: 0.60–0.90%, P: ≤0.04%, S: ≤0.05%",
-    estado_entrega_probeta: "Dureza natural (70 kg/mm²; 207 HB)",
-    dureza_max_recocido_hb: "207 HB (en estado natural)",
-    aplicaciones: "Construcción de maquinaria en general: ejes, árboles, piezas prensadas o estampadas, chavetas y partes expuestas al desgaste por fricción.",
-    clasificacion_iso: "P",
-    norma_aisi_sae: "1045",
-    norma_din_en: "C45W",
-    numero_material_wnr: "1.1730",
-    maquinabilidad: "",
-    soldabilidad: "",
-    imagenes_muestra: [],
-    video_url: ""
-  },
-  {
-    slug: "sae-1045-c12",
-    nombre: "SAE 1045",
-    categoria: "Aceros al carbono / aleados",
-    codigo_laboratorio: "C12",
-    diametro_pulgadas: "¾",
-    color_identificacion: "Blanco",
-    codigo_color_ferrum: "Blanco",
-    composicion_quimica: "C: 0.43–0.50%, Si: 0.10–0.20%, Mn: 0.60–0.90%, P: ≤0.04%, S: ≤0.05%",
-    estado_entrega_probeta: "Dureza natural (70 kg/mm²; 207 HB)",
-    dureza_max_recocido_hb: "207 HB (en estado natural)",
-    aplicaciones: "Construcción de maquinaria en general: ejes, árboles, piezas prensadas o estampadas, chavetas y partes expuestas al desgaste por fricción.",
-    clasificacion_iso: "P",
-    norma_aisi_sae: "1045",
-    norma_din_en: "C45W",
-    numero_material_wnr: "1.1730",
-    maquinabilidad: "",
-    soldabilidad: "",
-    imagenes_muestra: [],
-    video_url: ""
-  },
-  {
-    slug: "sae-1020-g20",
-    nombre: "SAE 1020",
-    categoria: "Aceros al carbono / aleados",
-    codigo_laboratorio: "G20",
-    diametro_pulgadas: "¾",
-    color_identificacion: "",
-    codigo_color_ferrum: "",
-    composicion_quimica: "C: 0.18–0.23%, Si: 0.15–0.35%, Mn: 0.30–0.60%, P: ≤0.04%, S: ≤0.05%",
-    estado_entrega_probeta: "Dureza natural (125–170 HB)",
-    dureza_max_recocido_hb: "170 HB",
-    aplicaciones: "Fabricación de piezas sometidas a bajas solicitaciones mecánicas: eslabones, cadenas, pernos, tornillos, pasadores.",
-    clasificacion_iso: "P",
-    norma_aisi_sae: "1020",
-    norma_din_en: "C22",
-    numero_material_wnr: "1.0402",
-    maquinabilidad: "",
-    soldabilidad: "Apto para soldadura",
-    imagenes_muestra: [],
-    video_url: ""
-  },
-  {
-    slug: "sae-1020-g07",
-    nombre: "SAE 1020",
-    categoria: "Aceros al carbono / aleados",
-    codigo_laboratorio: "G07",
-    diametro_pulgadas: "½",
-    color_identificacion: "",
-    codigo_color_ferrum: "",
-    composicion_quimica: "C: 0.18–0.23%, Si: 0.15–0.35%, Mn: 0.30–0.60%, P: ≤0.04%, S: ≤0.05%",
-    estado_entrega_probeta: "Dureza natural (125–170 HB)",
-    dureza_max_recocido_hb: "170 HB",
-    aplicaciones: "Fabricación de piezas sometidas a bajas solicitaciones mecánicas: eslabones, cadenas, pernos, tornillos, pasadores.",
-    clasificacion_iso: "P",
-    norma_aisi_sae: "1020",
-    norma_din_en: "C22",
-    numero_material_wnr: "1.0402",
-    maquinabilidad: "",
-    soldabilidad: "Apto para soldadura",
-    imagenes_muestra: [],
-    video_url: ""
-  },
-  {
-    slug: "inox-316-h01",
-    nombre: "INOX 316",
-    categoria: "Aceros inoxidables",
-    codigo_laboratorio: "H01",
-    diametro_pulgadas: "½",
-    color_identificacion: "",
-    codigo_color_ferrum: "",
-    composicion_quimica: "C: max. 0.08%, Cr: 17%, Ni: 12%, Mo: 2.5%",
-    estado_entrega_probeta: "Apagado (austenitizado), acabado según AISI",
-    dureza_max_recocido_hb: "160 HB máx.",
-    aplicaciones: "Industria alimenticia, vinícola, cervecera, lechería, farmacéutica, papelera, textil, construcción, equipos para atmósfera marina.",
-    clasificacion_iso: "M",
-    norma_aisi_sae: "316",
-    norma_din_en: "",
-    numero_material_wnr: "",
-    maquinabilidad: "",
-    soldabilidad: "Adecuado para soldar (se recomienda arco o gas protector)",
-    imagenes_muestra: [],
-    video_url: ""
-  },
-  {
-    slug: "inox-420-i01",
-    nombre: "INOX 420",
-    categoria: "Aceros inoxidables",
-    codigo_laboratorio: "I01",
-    diametro_pulgadas: "¾",
-    color_identificacion: "Azúl-Negro",
-    codigo_color_ferrum: "Azúl-Negro",
-    composicion_quimica: "C: >0.15%, Si: <1.0%, Mn: 1.25%, Cr: 12–14%",
-    estado_entrega_probeta: "Recocido (60–70 kg/mm²)",
-    dureza_max_recocido_hb: "240 HB",
-    aplicaciones: "Moldes para plásticos corrosivos y abrasivos (inyección y soplado), industria química y minera, equipos para ácido nítrico, refinerías, cabezales petroleros.",
-    clasificacion_iso: "M",
-    norma_aisi_sae: "420",
-    norma_din_en: "X40Cr14",
-    numero_material_wnr: "",
-    maquinabilidad: "",
-    soldabilidad: "Condicionalmente soldable (requiere precalentamiento a 200°C y recocido posterior)",
-    imagenes_muestra: [],
-    video_url: ""
-  },
-  {
-    slug: "sae-4140-k01",
-    nombre: "SAE 4140",
-    categoria: "Aceros al carbono / aleados",
-    codigo_laboratorio: "K01",
-    diametro_pulgadas: "1",
-    color_identificacion: "",
-    codigo_color_ferrum: "",
-    composicion_quimica: "C: 0.38–0.43%, Cr: 0.80–1.10%, Mo: 0.15–0.25%, Si: 0.15–0.35%, Mn: 0.75–1.00%, P: ≤0.035%, S: ≤0.04%",
-    estado_entrega_probeta: "Bonificado (90–105 kg/mm²) y liberado de tensiones (250–300 HB; 25–30 HRC)",
-    dureza_max_recocido_hb: "300 HB",
-    aplicaciones: "Construcción de vehículos, engranajes y motores: árboles de transmisión, brazos de ejes, ejes de bomba, cigüeñales, pernos, bielas, moldes para inyección de plástico.",
-    clasificacion_iso: "P",
-    norma_aisi_sae: "4140",
-    norma_din_en: "41CrMo4 / 42CrMo4",
-    numero_material_wnr: "1.7223 / 1.7225",
-    maquinabilidad: "Se puede mecanizar con herramientas de corte de acero rápido",
-    soldabilidad: "",
-    imagenes_muestra: [],
-    video_url: ""
+export async function getMaterialBySlug(slug: string) {
+  const { data, error } = await supabase
+    .from('materiales')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error || !data) {
+    return null;
   }
-];
-export const MATERIALES_MOCK = materiales;
+
+  return data;
+}

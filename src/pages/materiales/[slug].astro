@@ -1,64 +1,93 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import MaterialesSidebar from "../../components/MaterialesSidebar.astro";
-import { MATERIALES_MOCK, type Material } from "../../data/materiales";
+import { getMaterialBySlug } from "../../data/materiales";
 
-export function getStaticPaths() {
-    return MATERIALES_MOCK.map((mat) => ({
-        params: { slug: mat.slug },
-        props: { material: mat },
-    }));
+// 1. Extraemos el slug directamente de los parámetros de la URL
+const { slug } = Astro.params;
+
+if (!slug) {
+    return Astro.redirect("/404");
 }
 
-interface Props {
-    material: Material;
+// 2. Consulta a Supabase
+const material = await getMaterialBySlug(slug);
+
+if (!material) {
+    return Astro.redirect("/404");
 }
 
-const { material } = Astro.props;
-
-// Construimos las filas dinámicamente según la data del objeto
 const propiedadesTecnicas = [
     {
         etiqueta: "Clasificación del material (ISO)",
-        valor: `${material.clasificacion_iso} (${material.categoria})`,
+        valor: material.clasificacion_iso
+            ? `${material.clasificacion_iso} (${material.categoria || "N/A"})`
+            : "N/A",
     },
     {
         etiqueta: "Norma equivalente (AISI/SAE)",
-        valor: material.norma_aisi_sae,
+        valor: material.norma_aisi_sae || "N/A",
     },
-    { etiqueta: "Norma DIN / EN", valor: material.norma_din_en },
+    {
+        etiqueta: "Norma DIN / EN",
+        valor: material.norma_din_en || "N/A",
+    },
     {
         etiqueta: "Número de Material (W.Nr.)",
-        valor: material.numero_material_wnr,
+        valor: material.numero_material_wnr || "N/A",
     },
     {
         etiqueta: "Estado de entrega de la probeta",
-        valor: material.estado_entrega_probeta,
+        valor: material.estado_entrega_probeta || "N/A",
     },
     {
         etiqueta: "Dureza máxima en recocido (HB)",
-        valor: material.dureza_max_recocido_hb,
+        valor: material.dureza_max_recocido_hb || "N/A",
     },
-    { etiqueta: "Maquinabilidad", valor: material.maquinabilidad },
-    { etiqueta: "Soldabilidad", valor: material.soldabilidad },
+    {
+        etiqueta: "Maquinabilidad",
+        valor: material.maquinabilidad || "N/A",
+    },
+    {
+        etiqueta: "Soldabilidad",
+        valor: material.soldabilidad || "N/A",
+    },
     {
         etiqueta: "Código de color comercial (Ferrum)",
-        valor: material.codigo_color_ferrum,
+        valor: material.codigo_color_ferrum || "N/A",
+    },
+    {
+        etiqueta: "Código de Laboratorio",
+        valor: material.codigo_laboratorio || "N/A",
+    },
+    {
+        etiqueta: "Diámetro (pulgadas)",
+        valor: material.diametro_pulgadas || "N/A",
+    },
+    {
+        etiqueta: "Color de Identificación",
+        valor: material.color_identificacion || "N/A",
     },
 ];
+
+const imagenMuestra =
+    Array.isArray(material.imagenes_muestra) &&
+    material.imagenes_muestra.length > 0
+        ? material.imagenes_muestra[0]
+        : "https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&w=600&q=80";
 ---
 
 <Layout title={material.nombre}>
     <div class="flex flex-col lg:flex-row gap-8 items-start py-4">
         <!-- Sidebar Izquierdo -->
-        <MaterialesSidebar currentSlug={material.slug} />
+        <MaterialesSidebar currentSlug={material.slug || slug} />
 
         <!-- Card Única del Material -->
         <article
             class="flex-grow max-w-4xl w-full bg-white rounded-xl border border-brand-border shadow-xs overflow-hidden p-6 sm:p-8 space-y-10"
         >
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <!-- Columna Izquierda (Aprox 45-50% -> col-span-7) -->
+                <!-- Columna Izquierda -->
                 <div class="lg:col-span-7 space-y-6">
                     <h1
                         class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight"
@@ -74,7 +103,7 @@ const propiedadesTecnicas = [
                                 class="block text-brand-dark font-bold text-base mb-1"
                                 >Composición Química:</strong
                             >
-                            <p>{material.composicion_quimica}</p>
+                            <p>{material.composicion_quimica || "N/A"}</p>
                         </div>
 
                         <div>
@@ -83,9 +112,9 @@ const propiedadesTecnicas = [
                                 >Estado de Entrega:</strong
                             >
                             <p>
-                                {material.estado_entrega_probeta}. Su dureza en
-                                estado recocido es de máximo {
-                                    material.dureza_max_recocido_hb
+                                {material.estado_entrega_probeta || "N/A"}. Su
+                                dureza en estado recocido es de máximo {
+                                    material.dureza_max_recocido_hb || "N/A"
                                 }.
                             </p>
                         </div>
@@ -95,30 +124,28 @@ const propiedadesTecnicas = [
                                 class="block text-brand-dark font-bold text-base mb-1"
                                 >Aplicaciones:</strong
                             >
-                            <p>{material.aplicaciones}</p>
+                            <p>{material.aplicaciones || "N/A"}</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Columna Derecha (Aprox 35-40% -> col-span-5) -->
+                <!-- Columna Derecha -->
                 <div class="lg:col-span-5 space-y-3">
-                    <!-- Foto ocupando todo el ancho de la columna -->
                     <div
                         class="w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-brand-border bg-slate-100"
                     >
                         <img
-                            src={material.imagenes_muestra[0] ||
-                                "https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&w=600&q=80"}
+                            src={imagenMuestra}
                             alt={`Fotografía de ${material.nombre}`}
                             class="w-full h-full object-cover"
                         />
                     </div>
 
-                    <!-- Opciones de Descarga (Uno al lado del otro) -->
+                    <!-- Opciones de Descarga -->
                     <div class="grid grid-cols-2 gap-2 pt-1">
                         <button
                             type="button"
-                            class="w-full px-3 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-1.5 text-center"
+                            class="w-full px-3 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-1.5 text-center cursor-pointer"
                         >
                             <svg
                                 class="w-4 h-4"
@@ -136,9 +163,12 @@ const propiedadesTecnicas = [
                             <span>Ficha Técnica</span>
                         </button>
 
+                        <!-- Botón para gatillar la descarga directa -->
                         <button
                             type="button"
-                            class="w-full px-3 py-2 bg-slate-100 hover:bg-slate-200 text-brand-dark border border-brand-border text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center"
+                            id="btn-descargar-qr"
+                            data-material-nombre={material.nombre}
+                            class="w-full px-3 py-2 bg-slate-100 hover:bg-slate-200 text-brand-dark border border-brand-border text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center cursor-pointer"
                         >
                             <svg
                                 class="w-4 h-4 text-brand-body"
@@ -178,3 +208,38 @@ const propiedadesTecnicas = [
         </article>
     </div>
 </Layout>
+
+<script>
+    const btnDescargar = document.getElementById("btn-descargar-qr");
+
+    btnDescargar?.addEventListener("click", async () => {
+        // Carga la librería dinámicamente solo al hacer clic (ahorra transferencia de bytes)
+        const QRCode = (await import("qrcode")).default;
+
+        const currentUrl = window.location.href;
+        const nombreMaterial =
+            btnDescargar.getAttribute("data-material-nombre") || "material";
+
+        try {
+            // Genera la imagen PNG en formato Data URL a 1000x1000 px
+            const qrDataUrl = await QRCode.toDataURL(currentUrl, {
+                width: 1000,
+                margin: 2,
+                color: {
+                    dark: "#000000",
+                    light: "#ffffff",
+                },
+            });
+
+            // Dispara la descarga invisible en el navegador
+            const link = document.createElement("a");
+            link.href = qrDataUrl;
+            link.download = `QR-${nombreMaterial.replace(/\s+/g, "-")}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Error generando el código QR:", error);
+        }
+    });
+</script>

@@ -1,0 +1,38 @@
+---
+import QRCodeLib from "qrcode";
+
+interface Props {
+    url?: string;
+    size?: number;
+    class?: string;
+}
+
+const { url = Astro.url.href, size = 120, class: className = "" } = Astro.props;
+
+let qrSvg = "";
+
+try {
+    // Genera el código QR directamente como código SVG puro
+    qrSvg = await QRCodeLib.toString(url, {
+        type: "svg",
+        width: size,
+        margin: 1,
+        color: {
+            dark: "#0f172a",
+            light: "#ffffff",
+        },
+    });
+} catch (error) {
+    console.error("Error al generar código QR:", error);
+}
+---
+
+{
+    qrSvg ? (
+        <div class={`inline-block ${className}`} set:html={qrSvg} />
+    ) : (
+        <div class="w-24 h-24 bg-slate-100 flex items-center justify-center text-xs text-brand-muted">
+            QR no disponible
+        </div>
+    )
+}
