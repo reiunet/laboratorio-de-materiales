@@ -1,18 +1,15 @@
 ---
-export const prerender = false;
 import Layout from "../../layouts/Layout.astro";
 import MaterialesSidebar from "../../components/MaterialesSidebar.astro";
 import { getMaterialBySlug } from "../../data/materiales";
 
-// 1. Extraemos el slug directamente de los parámetros de la URL
 const { slug } = Astro.params;
 
 if (!slug) {
     return Astro.redirect("/404");
 }
 
-// 2. Consulta a Supabase
-const material = await getMaterialBySlug(slug);
+const material = getMaterialBySlug(slug);
 
 if (!material) {
     return Astro.redirect("/404");
@@ -71,11 +68,7 @@ const propiedadesTecnicas = [
     },
 ];
 
-const imagenMuestra =
-    Array.isArray(material.imagenes_muestra) &&
-    material.imagenes_muestra.length > 0
-        ? material.imagenes_muestra[0]
-        : "https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&w=600&q=80";
+const imagenMuestra = material.imagenes[0];
 ---
 
 <Layout title={material.nombre}>
@@ -84,47 +77,37 @@ const imagenMuestra =
         <MaterialesSidebar currentSlug={material.slug || slug} />
 
         <!-- Card Única del Material -->
-        <article
-            class="flex-grow max-w-4xl w-full bg-white rounded-xl border border-brand-border shadow-xs overflow-hidden p-6 sm:p-8 space-y-10"
-        >
+        <article class="flex-grow max-w-4xl w-full bg-white rounded-xl border border-brand-border shadow-xs overflow-hidden p-6 sm:p-8 space-y-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <!-- Columna Izquierda -->
                 <div class="lg:col-span-7 space-y-6">
-                    <h1
-                        class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight"
-                    >
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight">
                         {material.nombre}
                     </h1>
 
-                    <div
-                        class="space-y-4 text-sm text-brand-body leading-relaxed"
-                    >
+                    <div class="space-y-4 text-sm text-brand-body leading-relaxed">
                         <div>
-                            <strong
-                                class="block text-brand-dark font-bold text-base mb-1"
-                                >Composición Química:</strong
-                            >
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Composición Química:
+                            </strong>
                             <p>{material.composicion_quimica || "N/A"}</p>
                         </div>
 
                         <div>
-                            <strong
-                                class="block text-brand-dark font-bold text-base mb-1"
-                                >Estado de Entrega:</strong
-                            >
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Estado de Entrega:
+                            </strong>
                             <p>
                                 {material.estado_entrega_probeta || "N/A"}. Su
-                                dureza en estado recocido es de máximo {
-                                    material.dureza_max_recocido_hb || "N/A"
-                                }.
+                                dureza en estado recocido es de máximo{" "}
+                                {material.dureza_max_recocido_hb || "N/A"}.
                             </p>
                         </div>
 
                         <div>
-                            <strong
-                                class="block text-brand-dark font-bold text-base mb-1"
-                                >Aplicaciones:</strong
-                            >
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Aplicaciones:
+                            </strong>
                             <p>{material.aplicaciones || "N/A"}</p>
                         </div>
                     </div>
@@ -132,9 +115,7 @@ const imagenMuestra =
 
                 <!-- Columna Derecha -->
                 <div class="lg:col-span-5 space-y-3">
-                    <div
-                        class="w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-brand-border bg-slate-100"
-                    >
+                    <div class="w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
                         <img
                             src={imagenMuestra}
                             alt={`Fotografía de ${material.nombre}`}
@@ -190,21 +171,17 @@ const imagenMuestra =
                 </div>
             </div>
 
-            <div
-                class="divide-y divide-brand-border border-t border-b border-brand-border"
-            >
-                {
-                    propiedadesTecnicas.map((prop) => (
-                        <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
-                            <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
-                                {prop.etiqueta}
-                            </span>
-                            <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
-                                {prop.valor}
-                            </span>
-                        </div>
-                    ))
-                }
+            <div class="divide-y divide-brand-border border-t border-b border-brand-border">
+                {propiedadesTecnicas.map((prop) => (
+                    <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
+                        <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
+                            {prop.etiqueta}
+                        </span>
+                        <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
+                            {prop.valor}
+                        </span>
+                    </div>
+                ))}
             </div>
         </article>
     </div>

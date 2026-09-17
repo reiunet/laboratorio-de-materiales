@@ -1,175 +1,208 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from "../../layouts/Layout.astro";
 
-// Datos de ejemplo para el equipo / colaboradores
-const equipo = [
-  {
+// Profesor tutor (fila 1, solo él)
+const profesor = {
     nombre: "Ing. Alexander Flores",
-    rol: "Profesor Asesor / Lab. L051",
     carrera: "Departamento de Ingeniería Mecánica",
-    imagen: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    nombre: "Reinaldo Maestre",
-    rol: "Desarrollador Principal",
-    carrera: "Estudiante de Ingeniería Informática",
-    imagen: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    nombre: "Estudiante Colaborador 1",
-    rol: "Prestador de Servicio Comunitario",
-    carrera: "Ingeniería Mecánica",
-    imagen: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    nombre: "Estudiante Colaborador 2",
-    rol: "Prestador de Servicio Comunitario",
-    carrera: "Ingeniería Informática",
-    imagen: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    nombre: "Estudiante Colaborador 3",
-    rol: "Prestador de Servicio Comunitario",
-    carrera: "Ingeniería Mecánica",
-    imagen: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    nombre: "Estudiante Colaborador 4",
-    rol: "Prestador de Servicio Comunitario",
-    carrera: "Ingeniería Informática",
-    imagen: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80"
-  }
+};
+
+// Colaboradores (filas 2 y 3, 3 por fila)
+const colaboradores = [
+    { nombre: "Daniel Cárdenas", carrera: "Ingeniería Mecánica" },
+    { nombre: "Gabriela Casas", carrera: "Ingeniería Informática" },
+    { nombre: "Genesis Lombana", carrera: "Ingeniería Mecánica" },
+    { nombre: "Andrea Rojas", carrera: "Ingeniería Informática" },
+    { nombre: "Reinaldo Benitez", carrera: "Ingeniería Informática" },
 ];
+
+function getIniciales(nombre: string): string {
+    return nombre
+        .replace(/^(Ing\.|Dr\.|Prof\.)\s+/i, "")
+        .split(" ")
+        .filter((p) => p.length > 2)
+        .slice(0, 2)
+        .map((p) => p[0]?.toUpperCase() ?? "")
+        .join("");
+}
 ---
 
 <Layout title="Acerca del Proyecto — Muestrario Metalográfico Digital">
-  <div class="space-y-16 sm:space-y-24 py-4">
-
-    <!-- Hero / Presentación del Proyecto -->
-    <section class="space-y-3 w-full">
-        <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
-            Servicio Comunitario UNET
-        </span>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
-            Innovación digital al servicio de la formación en ingeniería
-        </h1>
-        <p class="text-lg sm:text-xl text-brand-dark leading-relaxed font-normal">
-            Este muestrario digital nace de la alianza estratégica entre los estudiantes de Servicio Comunitario y el equipo docente del Laboratorio de Materiales (L051). El objetivo central es modernizar la consulta técnica de la colección física de probetas de acero, poniendo al alcance de toda la comunidad universitaria un recurso accesible desde cualquier dispositivo.
-        </p>
-    </section>
-
-    <!-- Propósito del Proyecto (Grid de 2 Columnas) -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-      <div class="bg-white rounded-xl border border-brand-border p-6 sm:p-8 space-y-3 flex flex-col justify-between">
-        <div class="space-y-3">
-          <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-bold text-brand-dark">El Impacto Académico</h2>
-          <p class="text-sm text-brand-body leading-relaxed">
-            Facilita el estudio previo y posterior a las prácticas presenciales. Al digitalizar las propiedades mecánicas, tratamientos térmicos y composiciones químicas de cada probeta, los estudiantes pueden preparar sus informes y ensayos metalográficos con mayor precisión.
-          </p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-brand-border p-6 sm:p-8 space-y-3 flex flex-col justify-between">
-        <div class="space-y-3">
-          <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-bold text-brand-dark">Trabajo Multidisciplinario</h2>
-          <p class="text-sm text-brand-body leading-relaxed">
-            Representa la sinergia entre el conocimiento técnico-metalúrgico de Ingeniería Mecánica y el desarrollo de sistemas web de Ingeniería Informática, creando una herramienta adaptada a las necesidades reales del entorno universitario UNET.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección de Equipo y Colaboradores (Sin Cards, Gap Reducido) -->
-    <section class="space-y-6">
-        <div class="text-center max-w-xl mx-auto space-y-2">
-        <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight">
-            Equipo y Colaboradores
-        </h2>
-        <p class="text-sm text-brand-body">
-            Docentes y estudiantes involucrados en el levantamiento, desarrollo y digitalización del catálogo.
-        </p>
-        </div>
-
-        <!-- Grid de Colaboradores Limpio -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 py-2">
-        {equipo.map((persona) => (
-            <div class="text-center space-y-3 flex flex-col items-center">
-            <!-- Avatar Circular -->
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-brand-border bg-slate-100 shrink-0 shadow-xs">
-                <img
-                src={persona.imagen}
-                alt={persona.nombre}
-                class="w-full h-full object-cover"
-                />
-            </div>
-
-            <!-- Información -->
-            <div class="space-y-0.5">
-                <h3 class="text-sm font-bold text-brand-dark leading-snug">
-                {persona.nombre}
-                </h3>
-                <p class="text-xs font-semibold text-brand-primary">
-                {persona.rol}
-                </p>
-                <p class="text-[11px] text-brand-muted font-mono leading-tight">
-                {persona.carrera}
-                </p>
-            </div>
-            </div>
-        ))}
-        </div>
-    </section>
-
-    <!-- Ubicación e Instalaciones (Con Foto del Laboratorio) -->
-    <section class="bg-white rounded-xl border border-brand-border overflow-hidden">
-        <div class="grid grid-cols-1 lg:grid-cols-12 items-stretch">
-
-        <!-- Texto explicativo de ubicación -->
-        <div class="p-8 sm:p-10 lg:col-span-7 space-y-4 flex flex-col justify-center">
+    <div class="space-y-16 sm:space-y-24 py-4">
+        <!-- Hero / Presentación del Proyecto -->
+        <section class="space-y-3 w-full pt-20">
             <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
-            Sede Paramillo — San Cristóbal
+                Servicio Comunitario UNET
             </span>
-            <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight">
-            Ubicación del Laboratorio
-            </h2>
-            <p class="text-sm text-brand-body leading-relaxed">
-            El Laboratorio de Materiales (L051) se encuentra ubicado en el **Sótano del Edificio C** dentro del campus universitario de la Universidad Nacional Experimental del Táchira (UNET). Aquí se resguardan los equipos de corte, pulido, durómetros y microscopios para la caracterización real de las probetas.
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
+                Innovación digital al servicio de la formación en ingeniería
+            </h1>
+            <p class="text-lg sm:text-xl text-brand-dark leading-relaxed font-normal">
+                Este muestrario digital nace de la alianza estratégica entre los
+                estudiantes de Servicio Comunitario y el equipo docente del
+                Laboratorio de Materiales (L051). El objetivo central es
+                modernizar la consulta técnica de la colección física de
+                probetas de acero, poniendo al alcance de toda la comunidad
+                universitaria un recurso accesible desde cualquier dispositivo.
             </p>
+        </section>
 
-            <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono text-brand-dark">
-            <div class="p-3 bg-slate-50 rounded-lg border border-brand-border">
-                <span class="block text-brand-muted text-[10px] uppercase">Ubicación Física</span>
-                <span>Edificio C • Sótano L051</span>
+        <!-- Propósito del Proyecto -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <div class="bg-white rounded-xl border border-brand-border p-6 sm:p-8 space-y-3 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                            />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-brand-dark">
+                        El Impacto Académico
+                    </h2>
+                    <p class="text-sm text-brand-body leading-relaxed">
+                        Facilita el estudio previo y posterior a las prácticas
+                        presenciales. Al digitalizar las propiedades mecánicas,
+                        tratamientos térmicos y composiciones químicas de cada
+                        probeta, los estudiantes pueden preparar sus informes y
+                        ensayos metalográficos con mayor precisión.
+                    </p>
+                </div>
             </div>
-            <div class="p-3 bg-slate-50 rounded-lg border border-brand-border">
-                <span class="block text-brand-muted text-[10px] uppercase">Atención</span>
-                <span>Lunes a Viernes • Horario Académico</span>
+
+            <div class="bg-white rounded-xl border border-brand-border p-6 sm:p-8 space-y-3 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                            />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-brand-dark">
+                        Trabajo Multidisciplinario
+                    </h2>
+                    <p class="text-sm text-brand-body leading-relaxed">
+                        Representa la sinergia entre el conocimiento
+                        técnico-metalúrgico de Ingeniería Mecánica y el
+                        desarrollo de sistemas web de Ingeniería Informática,
+                        creando una herramienta adaptada a las necesidades
+                        reales del entorno universitario UNET.
+                    </p>
+                </div>
             </div>
+        </section>
+
+        <!-- Ubicación e Instalaciones -->
+        <section class="bg-white rounded-xl border border-brand-border overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+                <div class="p-8 sm:p-10 lg:col-span-7 space-y-4 flex flex-col justify-center">
+                    <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
+                        Sede Paramillo — San Cristóbal
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight">
+                        Ubicación del Laboratorio
+                    </h2>
+                    <p class="text-sm text-brand-body leading-relaxed">
+                        El Laboratorio de Materiales (L051) se encuentra ubicado
+                        en el Sótano del Edificio C dentro del campus
+                        universitario de la Universidad Nacional Experimental
+                        del Táchira (UNET). Aquí se resguardan los equipos de
+                        corte, pulido, durómetros y microscopios para la
+                        caracterización real de las probetas.
+                    </p>
+
+                    <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono text-brand-dark">
+                        <div class="p-3 bg-slate-50 rounded-lg border border-brand-border">
+                            <span class="block text-brand-muted text-[10px] uppercase">
+                                Ubicación Física
+                            </span>
+                            <span>Edificio C • Sótano L051</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-lg border border-brand-border">
+                            <span class="block text-brand-muted text-[10px] uppercase">
+                                Atención
+                            </span>
+                            <span>Lunes a Viernes • Horario Académico</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 h-64 lg:h-auto min-h-[250px] bg-slate-100 relative">
+                    <img
+                        src="https://www.eduopinions.com/wp-content/uploads/2017/08/Universidad-del-T%C3%A1chira-campus-610x308.jpg"
+                        alt="Laboratorio de Materiales UNET L051"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Fotografía del Laboratorio de Materiales -->
-        <div class="lg:col-span-5 h-64 lg:h-auto min-h-[250px] bg-slate-100 relative">
-            <img
-            src="https://www.eduopinions.com/wp-content/uploads/2017/08/Universidad-del-T%C3%A1chira-campus-610x308.jpg"
-            alt="Laboratorio de Materiales UNET L051"
-            class="w-full h-full object-cover"
-            />
-        </div>
+        <!-- Equipo y Colaboradores -->
+        <section class="bg-slate-50/80 p-8 sm:p-10 space-y-8">
+            <!-- Heading + subheading con separador -->
+            <div class="space-y-2 pb-5 border-b border-brand-border">
+                <h3 class="text-base font-bold text-brand-dark tracking-tight">
+                    Equipo y Colaboradores
+                </h3>
+                <p class="text-xs text-brand-muted">
+                    Docentes y estudiantes involucrados en el levantamiento,
+                    desarrollo y digitalización del catálogo.
+                </p>
+            </div>
 
-        </div>
-    </section>
+            <!-- Fila 1: Tutor -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center text-xs font-bold shrink-0">
+                        {getIniciales(profesor.nombre)}
+                    </div>
+                    <div class="space-y-0.5 min-w-0">
+                        <p class="text-sm font-bold text-brand-dark leading-tight truncate">
+                            {profesor.nombre}
+                        </p>
+                        <p class="text-[11px] text-brand-muted font-mono leading-tight truncate">
+                            {profesor.carrera}
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-
-  </div>
+            <!-- Filas 2 y 3: Colaboradores (3 por fila) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
+                {colaboradores.map((persona) => (
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white text-brand-body flex items-center justify-center text-xs font-bold shrink-0 border border-brand-border">
+                            {getIniciales(persona.nombre)}
+                        </div>
+                        <div class="space-y-0.5 min-w-0">
+                            <p class="text-sm font-semibold text-brand-dark leading-tight truncate">
+                                {persona.nombre}
+                            </p>
+                            <p class="text-[11px] text-brand-muted font-mono leading-tight truncate">
+                                {persona.carrera}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </section>
+    </div>
 </Layout>

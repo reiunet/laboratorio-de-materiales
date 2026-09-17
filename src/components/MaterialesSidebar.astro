@@ -1,54 +1,54 @@
 ---
-import { supabase } from '../lib/supabase';
+import { getAllMateriales } from "../data/materiales";
 
 interface Props {
-  currentSlug?: string;
+    currentSlug?: string;
 }
 
 const { currentSlug } = Astro.props;
 
-const { data: materiales, error } = await supabase
-  .from('materiales')
-  .select('id, nombre, slug, color_identificacion')
-  .order('nombre', { ascending: true });
-
-if (error) {
-  console.error('Error al obtener materiales:', error.message);
-}
-
-const listaMateriales = materiales || [];
+const listaMateriales = getAllMateriales()
+    .map(({ id, nombre, slug, color_identificacion }) => ({
+        id,
+        nombre,
+        slug,
+        color_identificacion,
+    }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
 ---
 
 <aside class="w-full lg:w-64 shrink-0 space-y-4">
-  <!-- Encabezado-->
-  <div class="flex items-center justify-between pb-2 border-b border-brand-border">
-    <h2 class="text-sm font-bold text-brand-dark uppercase tracking-wider">Aceros y Muestras</h2>
-    <span class="text-xs font-mono font-semibold px-2 py-0.5 bg-slate-200/70 text-brand-dark rounded-full">
-      {listaMateriales.length}
-    </span>
-  </div>
+    <!-- Encabezado-->
+    <div class="flex items-center justify-between pb-2 border-b border-brand-border">
+        <h2 class="text-sm font-bold text-brand-dark uppercase tracking-wider">
+            Aceros y Muestras
+        </h2>
+        <span class="text-xs font-mono font-semibold px-2 py-0.5 bg-slate-200/70 text-brand-dark rounded-full">
+            {listaMateriales.length}
+        </span>
+    </div>
 
-  <!-- Lista de Materiales -->
-  <nav class="space-y-0.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
-    {listaMateriales.map((item) => {
-      const isSelected = item.slug === currentSlug;
-      return (
-        <a
-          href={`/materiales/${item.slug}`}
-          class={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all group ${
-            isSelected
-              ? 'bg-brand-primary text-white font-semibold shadow-xs'
-              : 'text-brand-dark hover:bg-slate-200/60 hover:text-brand-dark'
-          }`}
-        >
-          <!-- Indicador de color -->
-          <span
-            class="w-2.5 h-2.5 rounded-full shrink-0 border border-black/20"
-            style={`background-color: ${item.color_identificacion};`}
-          />
-          <span class="truncate">{item.nombre}</span>
-        </a>
-      );
-    })}
-  </nav>
+    <!-- Lista de Materiales -->
+    <nav class="space-y-0.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+        {listaMateriales.map((item) => {
+            const isSelected = item.slug === currentSlug;
+            return (
+                <a
+                    href={`/materiales/${item.slug}`}
+                    class={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all group ${
+                        isSelected
+                            ? "bg-brand-primary text-white font-semibold shadow-xs"
+                            : "text-brand-dark hover:bg-slate-200/60 hover:text-brand-dark"
+                    }`}
+                >
+                    <!-- Indicador de color -->
+                    <span
+                        class="w-2.5 h-2.5 rounded-full shrink-0 border border-black/20"
+                        style={`background-color: ${item.color_identificacion || "#cccccc"};`}
+                    />
+                    <span class="truncate">{item.nombre}</span>
+                </a>
+            );
+        })}
+    </nav>
 </aside>
