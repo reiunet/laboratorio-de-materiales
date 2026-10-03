@@ -15,11 +15,12 @@ if (!material) {
     return Astro.redirect("/404");
 }
 
+// Construimos las propiedades técnicas dinámicamente
 const propiedadesTecnicas = [
     {
         etiqueta: "Clasificación del material (ISO)",
         valor: material.clasificacion_iso
-            ? `${material.clasificacion_iso} (${material.categoria || "N/A"})`
+            ? `${material.clasificacion_iso} (${material.tipo_material || "N/A"})`
             : "N/A",
     },
     {
@@ -55,18 +56,25 @@ const propiedadesTecnicas = [
         valor: material.codigo_color_ferrum || "N/A",
     },
     {
-        etiqueta: "Código de Laboratorio",
-        valor: material.codigo_laboratorio || "N/A",
-    },
-    {
-        etiqueta: "Diámetro (pulgadas)",
-        valor: material.diametro_pulgadas || "N/A",
-    },
-    {
         etiqueta: "Color de Identificación",
         valor: material.color_identificacion || "N/A",
     },
 ];
+
+// Renderizamos las presentaciones como un listado
+const presentacionesTexto =
+    material.presentaciones && material.presentaciones.length > 0
+        ? material.presentaciones
+              .map((p) => {
+                  const partes = [];
+                  if (p.codigo_laboratorio)
+                      partes.push(`Código: ${p.codigo_laboratorio}`);
+                  if (p.diametro_pulgadas)
+                      partes.push(`Diámetro: ${p.diametro_pulgadas}"`);
+                  return partes.join(" - ");
+              })
+              .join(" | ")
+        : "N/A";
 
 const imagenMuestra = material.imagenes[0];
 ---
@@ -182,6 +190,16 @@ const imagenMuestra = material.imagenes[0];
                         </span>
                     </div>
                 ))}
+
+                <!-- NUEVA FILA: Presentaciones (Códigos y Diámetros) -->
+                <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
+                    <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
+                        Presentaciones Disponibles (Lab / Diámetro)
+                    </span>
+                    <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
+                        {presentacionesTexto}
+                    </span>
+                </div>
             </div>
         </article>
     </div>

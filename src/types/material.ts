@@ -1,10 +1,13 @@
+export interface Presentacion {
+  codigo_laboratorio: string | null;
+  diametro_pulgadas: string | null;
+}
+
 export interface Material {
   id: string;
   slug: string;
   nombre: string;
-  categoria: string | null;
-  codigo_laboratorio: string | null;
-  diametro_pulgadas: string | null;
+  tipo_material: string | null;
   color_identificacion: string | null;
   codigo_color_ferrum: string | null;
   composicion_quimica: string | null;
@@ -18,6 +21,8 @@ export interface Material {
   maquinabilidad: string | null;
   soldabilidad: string | null;
   imagenes_muestra: string[] | null;
+  imagenes_tratamiento_termico: string[] | null;
   video_url: string | null;
   created_at: string;
+  presentaciones: Presentacion[];
 }
