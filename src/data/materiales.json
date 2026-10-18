@@ -21,15 +21,18 @@
     "video_url": "",
     "created_at": "2026-07-27 21:54:34.367773+00",
     "presentaciones": [
-      {
-        "codigo_laboratorio": "G07",
-        "diametro_pulgadas": "½"
-      },
-      {
-        "codigo_laboratorio": "G20",
-        "diametro_pulgadas": "¾"
-      }
-    ]
+      { "codigo_laboratorio": "G07", "diametro_pulgadas": "½" },
+      { "codigo_laboratorio": "G20", "diametro_pulgadas": "¾" }
+    ],
+    "tratamiento_termico": {
+      "forjado": "1050–1200 °C",
+      "normalizado": "870–890 °C",
+      "recocido": "650–700 °C. Enfriamiento lento en el horno.",
+      "temple": "820–850 °C (agua) / 830–860 °C (aceite)",
+      "revenido": "300–670 °C",
+      "austenitizado": null,
+      "notas": null
+    }
   },
   {
     "id": "49fc3e10-7149-484c-a635-651c605e3bc1",
@@ -53,15 +56,18 @@
     "video_url": "",
     "created_at": "2026-07-27 21:54:34.367773+00",
     "presentaciones": [
-      {
-        "codigo_laboratorio": "C12",
-        "diametro_pulgadas": "¾"
-      },
-      {
-        "codigo_laboratorio": "C8",
-        "diametro_pulgadas": "½"
-      }
-    ]
+      { "codigo_laboratorio": "C12", "diametro_pulgadas": "¾" },
+      { "codigo_laboratorio": "C8", "diametro_pulgadas": "½" }
+    ],
+    "tratamiento_termico": {
+      "forjado": "1100–800 °C. Enfriamiento lento en el horno.",
+      "normalizado": "850 °C",
+      "recocido": "680–710 °C. Enfriamiento lento en el horno.",
+      "temple": "800–830 °C. Enfriamiento en agua. Dureza obtenible: 58 HRC máx (610 HB).",
+      "revenido": null,
+      "austenitizado": null,
+      "notas": "Profundidad de penetración del temple (valores tipo) en espesores de 12–60 mm = 3–5 mm. Diámetro de temple total con temple óptimo: 15 mm."
+    }
   },
   {
     "id": "76a06db9-b09f-4f1f-ab0b-eae6f733f796",
@@ -85,11 +91,17 @@
     "video_url": "",
     "created_at": "2026-07-27 21:54:34.367773+00",
     "presentaciones": [
-      {
-        "codigo_laboratorio": "K01",
-        "diametro_pulgadas": "1"
-      }
-    ]
+      { "codigo_laboratorio": "K01", "diametro_pulgadas": "1" }
+    ],
+    "tratamiento_termico": {
+      "forjado": "1050–850 °C. Enfriamiento lento en el horno.",
+      "normalizado": "840–880 °C",
+      "recocido": null,
+      "temple": "830–860 °C. Enfriamiento en aceite.",
+      "revenido": "Según necesidad.",
+      "austenitizado": null,
+      "notas": null
+    }
   },
   {
     "id": "f97e22ac-9fb9-4c63-9d89-59b069d70d9c",
@@ -112,7 +124,16 @@
     "imagenes_tratamiento_termico": [],
     "video_url": "",
     "created_at": "2026-07-27 21:54:34.367773+00",
-    "presentaciones": []
+    "presentaciones": [],
+    "tratamiento_termico": {
+      "forjado": "1150–850 °C",
+      "normalizado": null,
+      "recocido": "840–890 °C",
+      "temple": "980–1035 °C",
+      "revenido": "200–400 °C para máxima dureza",
+      "austenitizado": null,
+      "notas": "No revenir por encima de 420 °C: cae la resistencia al impacto."
+    }
   },
   {
     "id": "fb10af2f-6556-4562-b948-ac088c2945a2",
@@ -136,79 +157,112 @@
     "video_url": "",
     "created_at": "2026-07-27 21:54:34.367773+00",
     "presentaciones": [
-      {
-        "codigo_laboratorio": "H01",
-        "diametro_pulgadas": "½"
-      }
-    ]
+      { "codigo_laboratorio": "H01", "diametro_pulgadas": "½" }
+    ],
+    "tratamiento_termico": {
+      "forjado": "1150–800 °C / Aire",
+      "normalizado": null,
+      "recocido": null,
+      "temple": null,
+      "revenido": null,
+      "austenitizado": "1050–1100 °C / Agua – Aire",
+      "notas": null
+    }
   },
   {
     "id": "nuevo-id-1075",
     "slug": "sae-1075",
-    "nombre": "SAE 1075",
+    "nombre": "*SAE 1075",
     "tipo_material": "Aceros al Carbono",
     "color_identificacion": "",
     "codigo_color_ferrum": "",
-    "composicion_quimica": "",
-    "estado_entrega_probeta": "",
-    "dureza_max_recocido_hb": "",
-    "aplicaciones": "",
+    "composicion_quimica": "C: 0.70–0.80%, Mn: 0.40–0.70%, P: ≤0.04%, S: ≤0.05%",
+    "estado_entrega_probeta": "Templado y revenido (50–55 HRC, condición de resorte)",
+    "dureza_max_recocido_hb": "50–55 HRC (templado y revenido)",
+    "aplicaciones": "Resortes, cuchillas, herramientas de corte, componentes sometidos a carga cíclica que requieren alta elasticidad y resistencia a la fatiga.",
     "clasificacion_iso": "",
     "norma_aisi_sae": "1075",
-    "norma_din_en": "",
-    "numero_material_wnr": "",
-    "maquinabilidad": "",
-    "soldabilidad": "",
+    "norma_din_en": "C75",
+    "numero_material_wnr": "1.0605",
+    "maquinabilidad": "Mecanizar y conformar en estado recocido. Maquinabilidad ~50% respecto al AISI 1112.",
+    "soldabilidad": "Pobre (alto carbono). Requiere precalentamiento 260–320 °C y postcalentamiento 650–780 °C si es imprescindible soldar.",
     "imagenes_muestra": [],
     "imagenes_tratamiento_termico": [],
     "video_url": "",
     "created_at": "2026-10-03 00:00:00.000000+00",
-    "presentaciones": []
+    "presentaciones": [],
+    "tratamiento_termico": {
+      "forjado": "1100–850 °C",
+      "normalizado": null,
+      "recocido": "925 °C",
+      "temple": "890 °C (aceite)",
+      "revenido": "Según necesidad para 50–55 HRC",
+      "austenitizado": null,
+      "notas": "Datos de referencia académica. Pendiente de validación por el laboratorio."
+    }
   },
   {
     "id": "nuevo-id-1010",
     "slug": "sae-1010",
-    "nombre": "SAE 1010",
+    "nombre": "*SAE 1010",
     "tipo_material": "Aceros al Carbono",
     "color_identificacion": "",
     "codigo_color_ferrum": "",
-    "composicion_quimica": "",
-    "estado_entrega_probeta": "",
-    "dureza_max_recocido_hb": "",
-    "aplicaciones": "",
+    "composicion_quimica": "C: 0.08–0.13%, Mn: 0.30–0.60%, P: ≤0.04%, S: ≤0.05%",
+    "estado_entrega_probeta": "Suministrado en estado base (~99 HRB ≈ 109 HB)",
+    "dureza_max_recocido_hb": "~99 HRB (≈ 109 HB)",
+    "aplicaciones": "Electrodomésticos, partes de automóvil, ruedas, piezas de baja solicitación. Buena maquinabilidad y conformado en frío.",
     "clasificacion_iso": "",
     "norma_aisi_sae": "1010",
     "norma_din_en": "",
     "numero_material_wnr": "",
-    "maquinabilidad": "",
-    "soldabilidad": "",
+    "maquinabilidad": "Buena (acero de bajo carbono, típicamente usado para mecanizado).",
+    "soldabilidad": null,
     "imagenes_muestra": [],
     "imagenes_tratamiento_termico": [],
     "video_url": "",
     "created_at": "2026-10-03 00:00:00.000000+00",
-    "presentaciones": []
+    "presentaciones": [],
+    "tratamiento_termico": {
+      "forjado": null,
+      "normalizado": null,
+      "recocido": null,
+      "temple": null,
+      "revenido": null,
+      "austenitizado": null,
+      "notas": "Datos de referencia académica. Pendiente de validación por el laboratorio."
+    }
   },
   {
     "id": "nuevo-id-1015",
     "slug": "sae-1015",
-    "nombre": "SAE 1015",
+    "nombre": "*SAE 1015",
     "tipo_material": "Aceros al Carbono",
     "color_identificacion": "",
     "codigo_color_ferrum": "",
-    "composicion_quimica": "",
-    "estado_entrega_probeta": "",
-    "dureza_max_recocido_hb": "",
-    "aplicaciones": "",
+    "composicion_quimica": "C: 0.13–0.18%, Mn: 0.30–0.60%, P: ≤0.040%, S: ≤0.050%",
+    "estado_entrega_probeta": "Trefilado en frío (111 HB)",
+    "dureza_max_recocido_hb": "111 HB",
+    "aplicaciones": "Piezas forjadas, encabezadas en frío o conformadas en frío, de baja resistencia pero con superficies duras y resistentes al desgaste. Piezas de maquinaria general.",
     "clasificacion_iso": "",
     "norma_aisi_sae": "1015",
     "norma_din_en": "",
     "numero_material_wnr": "",
-    "maquinabilidad": "",
-    "soldabilidad": "",
+    "maquinabilidad": "Buena (60% respecto al AISI 1212 como referencia 100%).",
+    "soldabilidad": "Buena (acero de bajo carbono).",
     "imagenes_muestra": [],
     "imagenes_tratamiento_termico": [],
     "video_url": "",
     "created_at": "2026-10-03 00:00:00.000000+00",
-    "presentaciones": []
+    "presentaciones": [],
+    "tratamiento_termico": {
+      "forjado": null,
+      "normalizado": null,
+      "recocido": null,
+      "temple": null,
+      "revenido": null,
+      "austenitizado": null,
+      "notas": "Datos de referencia académica. Pendiente de validación por el laboratorio."
+    }
   }
 ]

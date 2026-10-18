@@ -1,0 +1,16 @@
+
+CWD: /mnt/nvme_data/Projects/laboratorio-de-materiales
+Carpeta: /mnt/nvme_data/Projects/laboratorio-de-materiales/public/materiales/aisi-316l/aplicaciones
+Existe: true
+Archivos: [
+  "calderas_para_cocimiento_de_salsas.jpg",
+  "soporte_de_pasamanos_para_embarcaciones.png",
+  "tanque_agitador_con_sensores_conexiones.jpg",
+  "toneles_de_fermentacion.jpg"
+]
+Rutas: [
+  "/materiales/aisi-316l/aplicaciones/calderas_para_cocimiento_de_salsas.jpg",
+  "/materiales/aisi-316l/aplicaciones/soporte_de_pasamanos_para_embarcaciones.png",
+  "/materiales/aisi-316l/aplicaciones/tanque_agitador_con_sensores_conexiones.jpg",
+  "/materiales/aisi-316l/aplicaciones/toneles_de_fermentacion.jpg"
+]

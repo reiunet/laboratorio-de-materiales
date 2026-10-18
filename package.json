@@ -6,11 +6,12 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "node scripts/generar-imagenes.mjs && astro dev",
+    "build": "node scripts/generar-imagenes.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-types": "wrangler types"
+    "generate-types": "wrangler types",
+    "generate-images": "node scripts/generar-imagenes.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.5",

@@ -3,6 +3,16 @@ export interface Presentacion {
   diametro_pulgadas: string | null;
 }
 
+export interface TratamientoTermico {
+  forjado: string | null;
+  normalizado: string | null;
+  recocido: string | null;
+  temple: string | null;
+  revenido: string | null;
+  austenitizado: string | null;
+  notas: string | null;
+}
+
 export interface Material {
   id: string;
   slug: string;
@@ -25,4 +35,5 @@ export interface Material {
   video_url: string | null;
   created_at: string;
   presentaciones: Presentacion[];
+  tratamiento_termico: TratamientoTermico | null;
 }
