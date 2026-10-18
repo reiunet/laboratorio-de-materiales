@@ -151,11 +151,11 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
             <!-- Bloque 2: Carousel de Aplicaciones (solo si hay imágenes) -->
             {aplicaciones.length > 0 && (
                 <div class="space-y-3" id="carousel-aplicaciones">
-                    <div class="relative w-full h-72 sm:h-80 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
+                    <div class="relative w-full h-80 sm:h-96 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
                         {aplicaciones.map((app, i) => (
                             <div
                                 class:list={[
-                                    "absolute inset-0 transition-opacity duration-300",
+                                    "absolute inset-0 transition-opacity duration-300 p-2",
                                     i === 0
                                         ? "opacity-100"
                                         : "opacity-0 pointer-events-none",
@@ -165,9 +165,10 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
                                 <img
                                     src={app.src}
                                     alt={app.nombre}
-                                    class="w-full h-full object-cover"
+                                    class="w-full h-full object-contain drop-shadow-sm"
                                 />
-                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                                <!-- Gradiente usando el color de branding -->
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-dark/90 to-transparent p-2 pt-8">
                                     <span class="block text-center text-white text-base sm:text-lg font-bold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                                         {app.nombre}
                                     </span>
@@ -179,7 +180,7 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
                             <>
                                 <button
                                     type="button"
-                                    class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110"
+                                    class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 z-10"
                                     aria-label="Anterior"
                                 >
                                     <span class="text-xl font-bold leading-none pb-0.5">
@@ -188,7 +189,7 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
                                 </button>
                                 <button
                                     type="button"
-                                    class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110"
+                                    class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 z-10"
                                     aria-label="Siguiente"
                                 >
                                     <span class="text-xl font-bold leading-none pb-0.5">
