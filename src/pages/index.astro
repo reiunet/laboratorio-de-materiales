@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import { getAllMateriales } from "../data/materiales";
 
-// Obtenemos todos los materiales y tomamos los primeros 3 como destacados
 const materialesDestacados = getAllMateriales().slice(0, 3);
 ---
 
@@ -95,18 +94,15 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
                 </a>
             </div>
 
-            <!-- Grid Responsiva de Tarjetas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {materialesDestacados.map((item) => {
                     const imagenPrincipal =
                         item.imagenes[0] || "/materiales/material-default.jpg";
-
                     return (
                         <a
                             href={`/materiales/${item.slug}`}
                             class="group bg-white rounded-xl border border-brand-border overflow-hidden hover:border-brand-primary/50 hover:shadow-md transition-all flex flex-col"
                         >
-                            <!-- Fotografía -->
                             <div class="h-44 w-full bg-slate-100 overflow-hidden">
                                 <img
                                     src={imagenPrincipal}
@@ -116,22 +112,13 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
                             </div>
 
                             <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-                                <div class="flex items-center justify-between gap-3">
-                                    <div class="space-y-1">
-                                        <h3 class="text-lg font-bold text-brand-dark group-hover:text-brand-primary transition-colors">
-                                            {item.nombre}
-                                        </h3>
-                                        <p class="text-xs text-brand-muted font-mono font-medium">
-                                            AISI/SAE {item.norma_aisi_sae} • ISO{" "}
-                                            {item.clasificacion_iso}
-                                        </p>
-                                    </div>
-
-                                    <span
-                                        class="w-8 h-8 rounded-full border border-black/20 shrink-0 inline-block shadow-xs"
-                                        style={`background-color: ${item.color_identificacion || "#cccccc"};`}
-                                        title={`Color comercial: ${item.codigo_color_ferrum || "N/A"}`}
-                                    />
+                                <div class="space-y-1">
+                                    <h3 class="text-lg font-bold text-brand-dark group-hover:text-brand-primary transition-colors">
+                                        {item.nombre}
+                                    </h3>
+                                    <p class="text-xs text-brand-muted font-mono font-medium">
+                                        {item.tipo_material || "Acero"}
+                                    </p>
                                 </div>
 
                                 <div class="pt-3 border-t border-brand-border flex items-center justify-between text-xs text-brand-body font-medium">
@@ -185,9 +172,8 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
                             Especificaciones Técnicas
                         </h3>
                         <p class="text-xs text-brand-body leading-relaxed">
-                            Información detallada de cada acero según las
-                            normativas AISI y DIN, incluyendo su composición
-                            química, dureza y estados de entrega.
+                            Información detallada de cada acero, incluyendo su
+                            composición química, dureza y tratamiento térmico.
                         </p>
                     </div>
                     <a
@@ -271,11 +257,7 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
 
     btnDescargarHome?.addEventListener("click", async () => {
         const QRCode = (await import("qrcode")).default;
-
-        // ⚠️ Si quieres que el QR apunte a /materiales en vez del home, cambia esto:
-        // const currentUrl = `${window.location.origin}/materiales`;
         const currentUrl = window.location.href;
-
         const nombreMaterial =
             btnDescargarHome.getAttribute("data-material-nombre") || "QR";
 
@@ -283,10 +265,7 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
             const qrDataUrl = await QRCode.toDataURL(currentUrl, {
                 width: 1000,
                 margin: 2,
-                color: {
-                    dark: "#000000",
-                    light: "#ffffff",
-                },
+                color: { dark: "#000000", light: "#ffffff" },
             });
 
             const link = document.createElement("a");

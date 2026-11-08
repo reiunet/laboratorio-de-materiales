@@ -4,7 +4,6 @@ import path from 'node:path';
 const PUBLIC_DIR = path.join(process.cwd(), 'public/materiales');
 const OUTPUT_FILE = path.join(process.cwd(), 'src/data/imagenes-generadas.json');
 
-// Slugs que conocemos (desde el JSON de materiales)
 const materialesJson = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), 'src/data/materiales.json'), 'utf-8')
 );
@@ -15,14 +14,24 @@ const resultado = {};
 for (const slug of slugs) {
   const base = path.join(PUBLIC_DIR, slug);
   if (!fs.existsSync(base)) {
-    resultado[slug] = { probeta: null, aplicaciones: [], tratamiento_termico: [] };
+    resultado[slug] = { microscopia: {}, aplicaciones: [], tratamiento_termico: [] };
     continue;
   }
 
-  // Imagen principal: [slug]-probeta.*
-  const probeta = fs.readdirSync(base).find((f) =>
-    new RegExp(`^${slug}-probeta\\.(jpg|jpeg|png|webp|avif)$`, 'i').test(f)
-  );
+  // Microscopía: cualquier archivo tipo 200x.jpg, 500x.jpg, 800x.jpg, etc.
+  const microDir = path.join(base, 'microscopia');
+  const microscopia = {};
+  if (fs.existsSync(microDir)) {
+    const files = fs.readdirSync(microDir).filter((f) =>
+      /\.(jpg|jpeg|png|webp|avif)$/i.test(f)
+    );
+    files.forEach((f) => {
+      const match = f.match(/^(\d+)x\./i);
+      if (match) {
+        microscopia[match[1]] = `/materiales/${slug}/microscopia/${f}`;
+      }
+    });
+  }
 
   // Aplicaciones
   const appsDir = path.join(base, 'aplicaciones');
@@ -41,7 +50,7 @@ for (const slug of slugs) {
     : [];
 
   resultado[slug] = {
-    probeta: probeta ? `/materiales/${slug}/${probeta}` : null,
+    microscopia,
     aplicaciones,
     tratamiento_termico: tt,
   };

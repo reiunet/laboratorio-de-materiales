@@ -13,38 +13,18 @@ const material = getMaterialBySlug(slug);
 if (!material) return Astro.redirect("/404");
 
 const propiedadesTecnicas = [
+    { etiqueta: "Tipo de material", valor: material.tipo_material || "N/A" },
     {
-        etiqueta: "Clasificación del material (ISO)",
-        valor: material.clasificacion_iso
-            ? `${material.clasificacion_iso} (${material.tipo_material || "N/A"})`
-            : "N/A",
-    },
-    {
-        etiqueta: "Norma equivalente (AISI/SAE)",
-        valor: material.norma_aisi_sae || "N/A",
-    },
-    { etiqueta: "Norma DIN / EN", valor: material.norma_din_en || "N/A" },
-    {
-        etiqueta: "Número de Material (W.Nr.)",
-        valor: material.numero_material_wnr || "N/A",
-    },
-    {
-        etiqueta: "Estado de entrega de la probeta",
-        valor: material.estado_entrega_probeta || "N/A",
+        etiqueta: "Composición química",
+        valor: material.composicion_quimica || "N/A",
     },
     {
         etiqueta: "Dureza máxima en recocido (HB)",
         valor: material.dureza_max_recocido_hb || "N/A",
     },
-    { etiqueta: "Maquinabilidad", valor: material.maquinabilidad || "N/A" },
-    { etiqueta: "Soldabilidad", valor: material.soldabilidad || "N/A" },
     {
         etiqueta: "Código de color comercial (Ferrum)",
         valor: material.codigo_color_ferrum || "N/A",
-    },
-    {
-        etiqueta: "Color de Identificación",
-        valor: material.color_identificacion || "N/A",
     },
 ];
 
@@ -61,19 +41,30 @@ const presentacionesTexto = material.presentaciones?.length
           .join(" | ")
     : "N/A";
 
-const imagenMuestra = material.imagenes[0];
-
-// Preparamos las aplicaciones con su nombre formateado
 const aplicaciones = material.imagenes_aplicaciones.map((img) => ({
     src: img,
     nombre: formatearNombreArchivo(img.split("/").pop() || ""),
 }));
 
-// Preparamos los esquemas de TT con su nombre formateado
 const esquemasTT = material.imagenes_tt.map((img) => ({
     src: img,
     nombre: formatearNombreArchivo(img.split("/").pop() || ""),
 }));
+
+const aumentos = Object.keys(material.microscopia)
+    .map((k) => parseInt(k, 10))
+    .filter((n) => !isNaN(n))
+    .sort((a, b) => a - b);
+
+const microscopiaItems = aumentos.map((n) => ({
+    aumento: n,
+    src: material.microscopia[String(n)],
+}));
+
+const imagenInicial =
+    microscopiaItems.length > 0
+        ? microscopiaItems[0].src
+        : "/materiales/material-default.jpg";
 ---
 
 <Layout title={material.nombre}>
@@ -81,56 +72,23 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
         <MaterialesSidebar currentSlug={material.slug || slug} />
 
         <article class="flex-grow max-w-4xl w-full bg-white rounded-xl border border-brand-border shadow-xs overflow-hidden p-6 sm:p-8 space-y-10">
-            <!-- Bloque 1: imagen + info principal -->
+            <!-- Bloque 1: info + visor de microscopía -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-6">
-                    <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight">
-                        {material.nombre}
-                    </h1>
-
-                    <div class="space-y-4 text-sm text-brand-body leading-relaxed">
-                        <div>
-                            <strong class="block text-brand-dark font-bold text-base mb-1">
-                                Composición Química:
-                            </strong>
-                            <p>{material.composicion_quimica || "N/A"}</p>
-                        </div>
-                        <div>
-                            <strong class="block text-brand-dark font-bold text-base mb-1">
-                                Estado de Entrega:
-                            </strong>
-                            <p>
-                                {material.estado_entrega_probeta || "N/A"}. Su
-                                dureza en estado recocido es de máximo{" "}
-                                {material.dureza_max_recocido_hb || "N/A"}.
-                            </p>
-                        </div>
-                        <div>
-                            <strong class="block text-brand-dark font-bold text-base mb-1">
-                                Aplicaciones:
-                            </strong>
-                            <p>{material.aplicaciones || "N/A"}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 space-y-3">
-                    <div class="w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
-                        <img
-                            src={imagenMuestra}
-                            alt={`Fotografía de ${material.nombre}`}
-                            class="w-full h-full object-cover"
-                        />
-                    </div>
-                    <div class="pt-1">
+                    <div class="flex items-start justify-between gap-3 flex-wrap">
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight">
+                            {material.nombre}
+                        </h1>
                         <button
                             type="button"
                             id="btn-descargar-qr"
                             data-material-nombre={material.nombre}
-                            class="w-full px-3 py-2 bg-slate-100 hover:bg-slate-200 text-brand-dark border border-brand-border text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center cursor-pointer"
+                            title="Descargar QR"
+                            class="text-brand-primary hover:text-brand-primary-hover transition-colors cursor-pointer mt-1"
+                            aria-label="Descargar QR"
                         >
                             <svg
-                                class="w-4 h-4 text-brand-body"
+                                class="w-5 h-5"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -142,85 +100,67 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
                                     d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
                                 ></path>
                             </svg>
-                            <span>Descargar QR</span>
                         </button>
                     </div>
+
+                    <div class="space-y-4 text-sm text-brand-body leading-relaxed">
+                        <div>
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Composición Química:
+                            </strong>
+                            <p>{material.composicion_quimica || "N/A"}</p>
+                        </div>
+                        <div>
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Dureza máxima en recocido:
+                            </strong>
+                            <p>{material.dureza_max_recocido_hb || "N/A"}</p>
+                        </div>
+                        <div>
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Aplicaciones:
+                            </strong>
+                            <p>{material.aplicaciones || "N/A"}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Bloque 2: Carousel de Aplicaciones (solo si hay imágenes) -->
-            {aplicaciones.length > 0 && (
-                <div class="space-y-3" id="carousel-aplicaciones">
-                    <div class="relative w-full h-80 sm:h-96 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
-                        {aplicaciones.map((app, i) => (
-                            <div
-                                class:list={[
-                                    "absolute inset-0 transition-opacity duration-300 p-2",
-                                    i === 0
-                                        ? "opacity-100"
-                                        : "opacity-0 pointer-events-none",
-                                ]}
-                                data-slide={i}
-                            >
-                                <img
-                                    src={app.src}
-                                    alt={app.nombre}
-                                    class="w-full h-full object-contain drop-shadow-sm"
-                                />
-                                <!-- Gradiente usando el color de branding -->
-                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-dark/90 to-transparent p-2 pt-8">
-                                    <span class="block text-center text-white text-base sm:text-lg font-bold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                                        {app.nombre}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-
-                        {aplicaciones.length > 1 && (
-                            <>
-                                <button
-                                    type="button"
-                                    class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 z-10"
-                                    aria-label="Anterior"
-                                >
-                                    <span class="text-xl font-bold leading-none pb-0.5">
-                                        ‹
-                                    </span>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 z-10"
-                                    aria-label="Siguiente"
-                                >
-                                    <span class="text-xl font-bold leading-none pb-0.5">
-                                        ›
-                                    </span>
-                                </button>
-                            </>
-                        )}
+                <div class="lg:col-span-5 space-y-3">
+                    <div class="w-full h-72 sm:h-80 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
+                        <img
+                            id="visor-microscopia"
+                            src={imagenInicial}
+                            alt={`Microscopía de ${material.nombre}`}
+                            class="w-full h-full object-cover"
+                        />
                     </div>
 
-                    {aplicaciones.length > 1 && (
-                        <div class="flex justify-center gap-1.5">
-                            {aplicaciones.map((_, i) => (
+                    {microscopiaItems.length > 0 && (
+                        <div
+                            class="flex flex-wrap gap-2"
+                            id="botones-microscopia"
+                        >
+                            {microscopiaItems.map((item, i) => (
                                 <button
                                     type="button"
                                     class:list={[
-                                        "carousel-dot w-2 h-2 rounded-full transition-colors cursor-pointer",
+                                        "micro-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer",
                                         i === 0
-                                            ? "bg-brand-primary"
-                                            : "bg-slate-300",
+                                            ? "bg-brand-primary text-white border-brand-primary"
+                                            : "bg-white text-brand-dark border-brand-border hover:bg-slate-50",
                                     ]}
-                                    data-dot={i}
-                                    aria-label={`Ir a slide ${i + 1}`}
-                                ></button>
+                                    data-aumento={item.aumento}
+                                    data-src={item.src}
+                                >
+                                    {item.aumento}x
+                                </button>
                             ))}
                         </div>
                     )}
                 </div>
-            )}
+            </div>
 
-            <!-- Bloque 3: Tabla de propiedades -->
+            <!-- Bloque 2: Tabla de propiedades -->
             <div class="divide-y divide-brand-border border-t border-b border-brand-border">
                 {propiedadesTecnicas.map((prop) => (
                     <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
@@ -269,7 +209,7 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
                 )}
             </div>
 
-            <!-- Bloque 4: Esquemas de Tratamiento Térmico (solo si hay imágenes) -->
+            <!-- Bloque 3: Esquemas de Tratamiento Térmico -->
             {esquemasTT.length > 0 && (
                 <div class="space-y-3 pt-2">
                     <h3 class="text-lg font-bold text-brand-dark">
@@ -300,11 +240,81 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
                     </div>
                 </div>
             )}
+
+            <!-- Bloque 4: Carousel de Aplicaciones (al final) -->
+            {aplicaciones.length > 0 && (
+                <div class="space-y-3" id="carousel-aplicaciones">
+                    <div class="relative w-full h-80 sm:h-96 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
+                        {aplicaciones.map((app, i) => (
+                            <div
+                                class:list={[
+                                    "absolute inset-0 transition-opacity duration-300 p-2",
+                                    i === 0
+                                        ? "opacity-100"
+                                        : "opacity-0 pointer-events-none",
+                                ]}
+                                data-slide={i}
+                            >
+                                <img
+                                    src={app.src}
+                                    alt={app.nombre}
+                                    class="w-full h-full object-contain drop-shadow-sm"
+                                />
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-dark/90 to-transparent p-2 pt-8">
+                                    <span class="block text-center text-white text-base sm:text-lg font-bold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                                        {app.nombre}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                        {aplicaciones.length > 1 && (
+                            <>
+                                <button
+                                    type="button"
+                                    class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 z-10"
+                                    aria-label="Anterior"
+                                >
+                                    <span class="text-xl font-bold leading-none pb-0.5">
+                                        ‹
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-hover text-white border-2 border-white shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 z-10"
+                                    aria-label="Siguiente"
+                                >
+                                    <span class="text-xl font-bold leading-none pb-0.5">
+                                        ›
+                                    </span>
+                                </button>
+                            </>
+                        )}
+                    </div>
+                    {aplicaciones.length > 1 && (
+                        <div class="flex justify-center gap-1.5">
+                            {aplicaciones.map((_, i) => (
+                                <button
+                                    type="button"
+                                    class:list={[
+                                        "carousel-dot w-2 h-2 rounded-full transition-colors cursor-pointer",
+                                        i === 0
+                                            ? "bg-brand-primary"
+                                            : "bg-slate-300",
+                                    ]}
+                                    data-dot={i}
+                                    aria-label={`Ir a slide ${i + 1}`}
+                                ></button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </article>
     </div>
 </Layout>
 
 <script>
+    // QR
     const btnDescargar = document.getElementById("btn-descargar-qr");
     btnDescargar?.addEventListener("click", async () => {
         const QRCode = (await import("qrcode")).default;
@@ -328,6 +338,31 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
         }
     });
 
+    // Visor de microscopía
+    const visor = document.getElementById(
+        "visor-microscopia",
+    ) as HTMLImageElement | null;
+    const botonesMicro = document.querySelectorAll("[data-aumento]");
+    if (visor && botonesMicro.length > 0) {
+        botonesMicro.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const el = btn as HTMLElement;
+                const nuevoSrc = el.getAttribute("data-src");
+                if (nuevoSrc) visor.src = nuevoSrc;
+                botonesMicro.forEach((b) => {
+                    const bEl = b as HTMLElement;
+                    const active = bEl === el;
+                    bEl.classList.toggle("bg-brand-primary", active);
+                    bEl.classList.toggle("text-white", active);
+                    bEl.classList.toggle("border-brand-primary", active);
+                    bEl.classList.toggle("bg-white", !active);
+                    bEl.classList.toggle("text-brand-dark", !active);
+                    bEl.classList.toggle("border-brand-border", !active);
+                });
+            });
+        });
+    }
+
     // Carousel de aplicaciones
     const carousel = document.getElementById("carousel-aplicaciones");
     if (carousel) {
@@ -336,7 +371,6 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
         const prev = carousel.querySelector(".carousel-prev");
         const next = carousel.querySelector(".carousel-next");
         let current = 0;
-
         const goTo = (index: number) => {
             slides.forEach((s, i) => {
                 (s as HTMLElement).classList.toggle("opacity-100", i === index);
@@ -358,7 +392,6 @@ const esquemasTT = material.imagenes_tt.map((img) => ({
             });
             current = index;
         };
-
         prev?.addEventListener("click", () =>
             goTo((current - 1 + slides.length) % slides.length),
         );
