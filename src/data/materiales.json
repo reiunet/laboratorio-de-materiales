@@ -52,7 +52,7 @@
     }
   },
   {
-    "id": "nuevo-id-1060",
+    "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
     "slug": "sae-1060",
     "nombre": "*SAE 1060",
     "tipo_material": "Aceros al Carbono",
@@ -75,7 +75,7 @@
     }
   },
   {
-    "id": "nuevo-id-1075",
+    "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
     "slug": "sae-1075",
     "nombre": "*SAE 1075",
     "tipo_material": "Aceros al Carbono",
@@ -94,18 +94,18 @@
       "recocido": "925 °C",
       "temple": "890 °C (aceite)",
       "revenido": "Según necesidad para 50–55 HRC",
-      "notas": "Datos de referencia académica. Pendiente de validación por el laboratorio."
+      "notas": "Datos de referencia académica (AZoM, Steel Warehouse, SIJ). Pendiente de validación por el laboratorio."
     }
   },
   {
-    "id": "nuevo-id-1010",
+    "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
     "slug": "sae-1010",
     "nombre": "*SAE 1010",
     "tipo_material": "Aceros al Carbono",
     "codigo_color_ferrum": "",
-    "composicion_quimica": "C: 0.08–0.13%, Mn: 0.30–0.60%, P: ≤0.04%, S: ≤0.05%",
-    "dureza_max_recocido_hb": "~99 HRB (≈ 109 HB)",
-    "aplicaciones": "Electrodomésticos, partes de automóvil, ruedas, piezas de baja solicitación. Buena maquinabilidad y conformado en frío.",
+    "composicion_quimica": "C: 0.08–0.13%, Mn: 0.30–0.60%, P: ≤0.040%, S: ≤0.050%",
+    "dureza_max_recocido_hb": "105 HB (trefilado en frío)",
+    "aplicaciones": "Piezas de baja solicitación mecánica, componentes conformados en frío, aplicaciones generales de ingeniería. Buena conformabilidad y maquinabilidad regular. Adecuado para núcleos magnéticos.",
     "imagenes_muestra": [],
     "imagenes_tratamiento_termico": [],
     "video_url": "",
@@ -113,11 +113,11 @@
     "presentaciones": [],
     "tratamiento_termico": {
       "forjado": null,
-      "normalizado": null,
-      "recocido": null,
-      "temple": null,
-      "revenido": null,
-      "notas": "Datos de referencia académica. Pendiente de validación por el laboratorio."
+      "normalizado": "~900 °C (aire)",
+      "recocido": "871–982 °C (horno, enfriamiento lento)",
+      "temple": "845–870 °C (aceite, tras cementado)",
+      "revenido": "320–530 °C",
+      "notas": "Acero de bajo carbono; el temple directo no produce endurecimiento significativo. Se usa principalmente recocido o cementado. Datos de referencia (AZoM, SIJ, Shah & Shah Steels). Pendiente de validación."
     }
   },
   {
@@ -194,9 +194,9 @@
     }
   },
   {
-    "id": "nuevo-id-aisi-so1",
-    "slug": "aisi-so1",
-    "nombre": "AISI SO1",
+    "id": "c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
+    "slug": "aisi-01",
+    "nombre": "AISI 01",
     "tipo_material": "Aceros para Herramientas",
     "codigo_color_ferrum": "Azul - Rojo",
     "composicion_quimica": "C: 0.95%, Si: 0.25%, Mn: 1.10%, Cr: 0.55%, V: 0.10%, W: 0.55%",

@@ -223,20 +223,40 @@ const imagenInicial =
                                 : "grid-cols-1",
                         ]}
                     >
-                        {esquemasTT.map((esq) => (
-                            <div class="space-y-2">
-                                <div class="w-full rounded-lg overflow-hidden border border-brand-border bg-white">
-                                    <img
-                                        src={esq.src}
-                                        alt={esq.nombre}
-                                        class="w-full h-auto object-contain"
-                                    />
+                        {esquemasTT
+                            .sort((a, b) => {
+                                // Orden: esquema_tratamiento primero, diagrama_revenido después
+                                const prioridad = (nombre: string) => {
+                                    if (
+                                        nombre.toLowerCase().includes("esquema")
+                                    )
+                                        return 0;
+                                    if (
+                                        nombre
+                                            .toLowerCase()
+                                            .includes("revenido")
+                                    )
+                                        return 1;
+                                    return 2;
+                                };
+                                return (
+                                    prioridad(a.nombre) - prioridad(b.nombre)
+                                );
+                            })
+                            .map((esq) => (
+                                <div class="space-y-2">
+                                    <div class="w-full aspect-[4/3] rounded-lg overflow-hidden border border-brand-border bg-white">
+                                        <img
+                                            src={esq.src}
+                                            alt={esq.nombre}
+                                            class="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <p class="text-xs text-brand-dark text-center font-medium">
+                                        {esq.nombre}
+                                    </p>
                                 </div>
-                                <p class="text-xs text-brand-muted text-center">
-                                    {esq.nombre}
-                                </p>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 </div>
             )}
