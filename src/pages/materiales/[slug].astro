@@ -12,35 +12,6 @@ if (!slug) return Astro.redirect("/404");
 const material = getMaterialBySlug(slug);
 if (!material) return Astro.redirect("/404");
 
-const propiedadesTecnicas = [
-    { etiqueta: "Tipo de material", valor: material.tipo_material || "N/A" },
-    {
-        etiqueta: "Composición química",
-        valor: material.composicion_quimica || "N/A",
-    },
-    {
-        etiqueta: "Dureza máxima en recocido (HB)",
-        valor: material.dureza_max_recocido_hb || "N/A",
-    },
-    {
-        etiqueta: "Código de color comercial (Ferrum)",
-        valor: material.codigo_color_ferrum || "N/A",
-    },
-];
-
-const presentacionesTexto = material.presentaciones?.length
-    ? material.presentaciones
-          .map((p) => {
-              const partes = [];
-              if (p.codigo_laboratorio)
-                  partes.push(`Código: ${p.codigo_laboratorio}`);
-              if (p.diametro_pulgadas)
-                  partes.push(`Diámetro: ${p.diametro_pulgadas}"`);
-              return partes.join(" - ");
-          })
-          .join(" | ")
-    : "N/A";
-
 const aplicaciones = material.imagenes_aplicaciones.map((img) => ({
     src: img,
     nombre: formatearNombreArchivo(img.split("/").pop() || ""),
@@ -72,7 +43,7 @@ const imagenInicial =
         <MaterialesSidebar currentSlug={material.slug || slug} />
 
         <article class="flex-grow max-w-4xl w-full bg-white rounded-xl border border-brand-border shadow-xs overflow-hidden p-6 sm:p-8 space-y-10">
-            <!-- Bloque 1: info + visor de microscopía -->
+            <!-- Bloque 1: info completa + visor de microscopía -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-6">
                     <div class="flex items-start justify-between gap-3 flex-wrap">
@@ -106,21 +77,65 @@ const imagenInicial =
                     <div class="space-y-4 text-sm text-brand-body leading-relaxed">
                         <div>
                             <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Tipo de material:
+                            </strong>
+                            <p>{material.tipo_material || "N/A"}</p>
+                        </div>
+                        <div>
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
                                 Composición Química:
                             </strong>
                             <p>{material.composicion_quimica || "N/A"}</p>
                         </div>
                         <div>
                             <strong class="block text-brand-dark font-bold text-base mb-1">
-                                Dureza máxima en recocido:
+                                Dureza máxima en recocido (HB):
                             </strong>
                             <p>{material.dureza_max_recocido_hb || "N/A"}</p>
+                        </div>
+                        <div>
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Código de color comercial (Ferrum):
+                            </strong>
+                            <p>{material.codigo_color_ferrum || "N/A"}</p>
                         </div>
                         <div>
                             <strong class="block text-brand-dark font-bold text-base mb-1">
                                 Aplicaciones:
                             </strong>
                             <p>{material.aplicaciones || "N/A"}</p>
+                        </div>
+                        <div>
+                            <strong class="block text-brand-dark font-bold text-base mb-1">
+                                Presentaciones Físicas en el Laboratorio.
+                                Certificadas:
+                            </strong>
+                            {material.presentaciones &&
+                            material.presentaciones.length > 0 ? (
+                                <ul class="list-disc list-inside space-y-1">
+                                    {material.presentaciones.map((p) => (
+                                        <li>
+                                            {p.codigo_laboratorio && (
+                                                <span class="font-medium text-brand-dark">
+                                                    Código:{" "}
+                                                    {p.codigo_laboratorio}
+                                                </span>
+                                            )}
+                                            {p.codigo_laboratorio &&
+                                                p.diametro_pulgadas &&
+                                                " — "}
+                                            {p.diametro_pulgadas && (
+                                                <span>
+                                                    Diámetro:{" "}
+                                                    {p.diametro_pulgadas}"
+                                                </span>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>N/A</p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -160,54 +175,33 @@ const imagenInicial =
                 </div>
             </div>
 
-            <!-- Bloque 2: Tabla de propiedades -->
-            <div class="divide-y divide-brand-border border-t border-b border-brand-border">
-                {propiedadesTecnicas.map((prop) => (
-                    <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
-                        <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
-                            {prop.etiqueta}
-                        </span>
-                        <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
-                            {prop.valor}
-                        </span>
+            <!-- Bloque 2: Tabla de Tratamiento Térmico (solo esto) -->
+            {material.procesos_tratamiento.length > 0 && (
+                <div class="divide-y divide-brand-border border-t border-b border-brand-border">
+                    <div class="pt-6 pb-2">
+                        <h3 class="text-lg font-bold text-brand-dark">
+                            Tratamiento Térmico
+                        </h3>
                     </div>
-                ))}
-                <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
-                    <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
-                        Presentaciones Disponibles (Lab / Diámetro)
-                    </span>
-                    <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
-                        {presentacionesTexto}
-                    </span>
-                </div>
-
-                {material.procesos_tratamiento.length > 0 && (
-                    <>
-                        <div class="pt-6 pb-2">
-                            <h3 class="text-lg font-bold text-brand-dark">
-                                Tratamiento Térmico
-                            </h3>
+                    {material.procesos_tratamiento.map((p) => (
+                        <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
+                            <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
+                                {p.etiqueta}
+                            </span>
+                            <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
+                                {p.valor}
+                            </span>
                         </div>
-                        {material.procesos_tratamiento.map((p) => (
-                            <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-sm">
-                                <span class="text-brand-body text-xs sm:text-sm font-medium sm:w-1/2">
-                                    {p.etiqueta}
-                                </span>
-                                <span class="text-brand-dark font-bold text-xs sm:text-sm sm:w-1/2 sm:text-left">
-                                    {p.valor}
-                                </span>
-                            </div>
-                        ))}
-                        {material.tratamiento_termico?.notas && (
-                            <div class="py-3.5">
-                                <p class="text-xs text-brand-muted italic">
-                                    Nota: {material.tratamiento_termico.notas}
-                                </p>
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
+                    ))}
+                    {material.tratamiento_termico?.notas && (
+                        <div class="py-3.5">
+                            <p class="text-xs text-brand-muted italic">
+                                Nota: {material.tratamiento_termico.notas}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <!-- Bloque 3: Esquemas de Tratamiento Térmico -->
             {esquemasTT.length > 0 && (
@@ -225,7 +219,6 @@ const imagenInicial =
                     >
                         {esquemasTT
                             .sort((a, b) => {
-                                // Orden: esquema_tratamiento primero, diagrama_revenido después
                                 const prioridad = (nombre: string) => {
                                     if (
                                         nombre.toLowerCase().includes("esquema")
@@ -261,7 +254,7 @@ const imagenInicial =
                 </div>
             )}
 
-            <!-- Bloque 4: Carousel de Aplicaciones (al final) -->
+            <!-- Bloque 4: Carousel de Aplicaciones -->
             {aplicaciones.length > 0 && (
                 <div class="space-y-3" id="carousel-aplicaciones">
                     <div class="relative w-full h-80 sm:h-96 rounded-lg overflow-hidden border border-brand-border bg-slate-100">
@@ -280,11 +273,6 @@ const imagenInicial =
                                     alt={app.nombre}
                                     class="w-full h-full object-contain drop-shadow-sm"
                                 />
-                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-dark/90 to-transparent p-2 pt-8">
-                                    <span class="block text-center text-white text-base sm:text-lg font-bold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                                        {app.nombre}
-                                    </span>
-                                </div>
                             </div>
                         ))}
                         {aplicaciones.length > 1 && (

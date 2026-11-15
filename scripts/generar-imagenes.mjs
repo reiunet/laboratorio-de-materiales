@@ -58,3 +58,17 @@ for (const slug of slugs) {
 
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(resultado, null, 2));
 console.log(`✅ imagenes-generadas.json actualizado (${slugs.length} materiales)`);
+
+// Laboratorio
+const laboratorioDir = path.join(process.cwd(), 'public/laboratorio');
+const laboratorio = fs.existsSync(laboratorioDir)
+  ? fs.readdirSync(laboratorioDir)
+      .filter((f) => /\.(jpg|jpeg|png|webp|avif)$/i.test(f))
+      .map((f) => `/laboratorio/${f}`)
+  : [];
+
+fs.writeFileSync(
+  path.join(process.cwd(), 'src/data/laboratorio-imagenes.json'),
+  JSON.stringify(laboratorio, null, 2)
+);
+console.log(`✅ laboratorio-imagenes.json actualizado (${laboratorio.length} imágenes)`);

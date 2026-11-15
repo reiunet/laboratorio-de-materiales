@@ -7,13 +7,31 @@ interface Props {
 
 const { currentSlug } = Astro.props;
 
+// Orden definido manualmente según el patrón del profesor
+const ORDEN = [
+    "sae-1010",
+    "sae-1020",
+    "sae-1045",
+    "sae-1060",
+    "sae-1075",
+    "aisi-4140",
+    "aisi-01",
+    "aisi-316l",
+    "aisi-420",
+];
+
 const listaMateriales = getAllMateriales()
     .map(({ id, nombre, slug }) => ({
         id,
         nombre,
         slug,
     }))
-    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+    .sort((a, b) => {
+        const ia = ORDEN.indexOf(a.slug);
+        const ib = ORDEN.indexOf(b.slug);
+        // Si un slug no está en ORDEN, lo manda al final
+        return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
 ---
 
 <aside class="w-full lg:w-64 shrink-0 space-y-4">

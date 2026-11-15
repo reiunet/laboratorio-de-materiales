@@ -1,13 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 
-// Profesor tutor (fila 1, solo él)
 const profesor = {
-    nombre: "Ing. Alexander Flores",
-    carrera: "Departamento de Ingeniería Mecánica",
+    nombre: "Ing. Héctor Aguilar",
+    carrera:
+        "Coordinación de Laboratorios y Proyectos del Decanato de Docencia",
 };
 
-// Colaboradores (filas 2 y 3, 3 por fila)
 const colaboradores = [
     { nombre: "Daniel Cárdenas", carrera: "Ingeniería Mecánica" },
     { nombre: "Gabriela Casas", carrera: "Ingeniería Mecánica" },
@@ -29,31 +28,69 @@ function getIniciales(nombre: string): string {
 
 <Layout title="Acerca del Proyecto — Muestrario Metalográfico Digital">
     <div class="space-y-16 sm:space-y-24 py-4">
-        <!-- Hero / Presentación del Proyecto -->
-        <section class="space-y-3 w-full pt-20">
-            <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
-                Servicio Comunitario UNET
-            </span>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
-                Innovación digital al servicio de la formación en ingeniería
-            </h1>
-            <p class="text-lg sm:text-xl text-brand-dark leading-relaxed font-normal">
-                Este muestrario digital nace de la alianza estratégica entre los
-                estudiantes de Servicio Comunitario y el equipo docente del
-                Laboratorio de Materiales (L051). El objetivo central es
-                modernizar la consulta técnica de la colección física de
-                probetas de acero, poniendo al alcance de toda la comunidad
-                universitaria un recurso accesible desde cualquier dispositivo.
-            </p>
+        <!-- Hero Principal (mismo estilo que el index) -->
+        <section class="relative rounded-2xl overflow-hidden border bg-slate-700 group">
+            <div class="absolute inset-0">
+                <img
+                    src="/lab-secondpic.jpg"
+                    alt="Laboratorio de Materiales UNET"
+                    class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700"
+                />
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-dark/70 to-brand-dark/40"></div>
+            </div>
+
+            <div class="relative z-10 px-6 sm:px-10 py-16 sm:py-24 space-y-6 max-w-5xl">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
+                        Servicio Comunitario UNET
+                    </span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                    Innovación digital al servicio de la formación en ingeniería
+                </h1>
+
+                <p class="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
+                    Este muestrario digital nace de la alianza estratégica entre
+                    los estudiantes de Servicio Comunitario y el equipo docente
+                    del Laboratorio de Materiales (L051). El objetivo central es
+                    modernizar la consulta técnica de la colección física de
+                    probetas de acero, poniendo al alcance de toda la comunidad
+                    universitaria un recurso accesible desde cualquier
+                    dispositivo.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <a
+                        href="/materiales"
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
+                    >
+                        <span>Explorar Catálogo</span>
+                        <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            ></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </section>
 
         <!-- Propósito del Proyecto -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             <div class="bg-white rounded-xl border border-brand-border p-6 sm:p-8 space-y-3 flex flex-col justify-between">
                 <div class="space-y-3">
-                    <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
+                    <div class="w-20 h-20 rounded-xl bg-slate-100 flex items-center justify-center text-brand-primary">
                         <svg
-                            class="w-5 h-5"
+                            class="w-10 h-10"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -66,14 +103,14 @@ function getIniciales(nombre: string): string {
                             />
                         </svg>
                     </div>
-                    <h2 class="text-xl font-bold text-brand-dark">
+                    <h2 class="text-2xl font-bold text-brand-dark">
                         El Impacto Académico
                     </h2>
                     <p class="text-sm text-brand-body leading-relaxed">
                         Facilita el estudio previo y posterior a las prácticas
-                        presenciales. Al digitalizar las propiedades mecánicas,
-                        tratamientos térmicos y composiciones químicas de cada
-                        probeta, los estudiantes pueden preparar sus informes y
+                        presenciales. Al digitalizar propiedades mecánicas,
+                        tratamientos térmicos y composición química de cada
+                        material, los estudiantes podrán preparar sus informes y
                         ensayos metalográficos con mayor precisión.
                     </p>
                 </div>
@@ -81,9 +118,9 @@ function getIniciales(nombre: string): string {
 
             <div class="bg-white rounded-xl border border-brand-border p-6 sm:p-8 space-y-3 flex flex-col justify-between">
                 <div class="space-y-3">
-                    <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
+                    <div class="w-20 h-20 rounded-xl bg-slate-100 flex items-center justify-center text-brand-primary">
                         <svg
-                            class="w-5 h-5"
+                            class="w-10 h-10"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -96,7 +133,7 @@ function getIniciales(nombre: string): string {
                             />
                         </svg>
                     </div>
-                    <h2 class="text-xl font-bold text-brand-dark">
+                    <h2 class="text-2xl font-bold text-brand-dark">
                         Trabajo Multidisciplinario
                     </h2>
                     <p class="text-sm text-brand-body leading-relaxed">
@@ -120,7 +157,7 @@ function getIniciales(nombre: string): string {
                     <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight">
                         Ubicación del Laboratorio
                     </h2>
-                    <p class="text-sm text-brand-body leading-relaxed">
+                    <p class="text-base text-brand-body leading-relaxed">
                         El Laboratorio de Materiales (L051) se encuentra ubicado
                         en el Sótano del Edificio C dentro del campus
                         universitario de la Universidad Nacional Experimental
@@ -129,15 +166,15 @@ function getIniciales(nombre: string): string {
                         caracterización real de las probetas.
                     </p>
 
-                    <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono text-brand-dark">
+                    <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-mono text-brand-dark">
                         <div class="p-3 bg-slate-50 rounded-lg border border-brand-border">
-                            <span class="block text-brand-muted text-[10px] uppercase">
+                            <span class="block text-brand-muted text-xs uppercase">
                                 Ubicación Física
                             </span>
                             <span>Edificio C • Sótano L051</span>
                         </div>
                         <div class="p-3 bg-slate-50 rounded-lg border border-brand-border">
-                            <span class="block text-brand-muted text-[10px] uppercase">
+                            <span class="block text-brand-muted text-xs uppercase">
                                 Atención
                             </span>
                             <span>Lunes a Viernes • Horario Académico</span>
@@ -157,12 +194,11 @@ function getIniciales(nombre: string): string {
 
         <!-- Equipo y Colaboradores -->
         <section class="bg-slate-50/80 p-8 sm:p-10 space-y-8">
-            <!-- Heading + subheading con separador -->
             <div class="space-y-2 pb-5 border-b border-brand-border">
-                <h3 class="text-base font-bold text-brand-dark tracking-tight">
+                <h3 class="text-xl font-bold text-brand-dark tracking-tight">
                     Equipo y Colaboradores
                 </h3>
-                <p class="text-xs text-brand-muted">
+                <p class="text-sm text-brand-muted">
                     Docentes y estudiantes involucrados en el levantamiento,
                     desarrollo y digitalización del catálogo.
                 </p>
@@ -178,7 +214,7 @@ function getIniciales(nombre: string): string {
                         <p class="text-sm font-bold text-brand-dark leading-tight truncate">
                             {profesor.nombre}
                         </p>
-                        <p class="text-[11px] text-brand-muted font-mono leading-tight truncate">
+                        <p class="text-xs text-brand-muted font-mono leading-tight truncate">
                             {profesor.carrera}
                         </p>
                     </div>
@@ -196,7 +232,7 @@ function getIniciales(nombre: string): string {
                             <p class="text-sm font-semibold text-brand-dark leading-tight truncate">
                                 {persona.nombre}
                             </p>
-                            <p class="text-[11px] text-brand-muted font-mono leading-tight truncate">
+                            <p class="text-xs text-brand-muted font-mono leading-tight truncate">
                                 {persona.carrera}
                             </p>
                         </div>

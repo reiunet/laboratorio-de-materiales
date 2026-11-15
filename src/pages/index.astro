@@ -8,54 +8,36 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
 <Layout title="Muestrario Metalográfico Digital — UNET">
     <div class="space-y-16 sm:space-y-24 py-4">
         <!-- Hero Principal -->
-        <section class="space-y-6">
-            <div class="space-y-3 w-full">
-                <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
-                    Laboratorio L051 — UNET
-                </span>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
+        <section class="relative rounded-2xl overflow-hidden border bg-slate-700 group">
+            <!-- Imagen de fondo (textura metalográfica o lab-mainpic) -->
+            <div class="absolute inset-0">
+                <img
+                    src="/lab-mainpic.jpg"
+                    alt="Laboratorio de Materiales UNET"
+                    class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700"
+                />
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-dark/70 to-brand-dark/40"></div>
+            </div>
+
+            <!-- Contenido del Hero -->
+            <div class="relative z-10 px-6 sm:px-10 py-16 sm:py-24 space-y-6 max-w-4xl">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
+                        Laboratorio L051 — UNET
+                    </span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
                     Muestrario Metalográfico Digital
                 </h1>
 
-                <div class="pt-2">
-                    <button
-                        type="button"
-                        id="btn-descargar-qr-home"
-                        data-material-nombre="Muestrario-Metalografico-UNET"
-                        class="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-brand-dark border border-brand-border text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-                    >
-                        <svg
-                            class="w-4 h-4 text-brand-body"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                            ></path>
-                        </svg>
-                        <span>Descargar QR</span>
-                    </button>
-                </div>
-
-                <p class="text-lg sm:text-xl text-brand-dark leading-relaxed font-normal">
+                <p class="text-base sm:text-lg text-white/80 leading-relaxed font-normal max-w-2xl">
                     Explora el catálogo técnico de aceros del Laboratorio de
                     Materiales. Escanea, analiza sus propiedades estructurales y
                     conoce sus aplicaciones en la ingeniería.
                 </p>
-            </div>
 
-            <!-- Banner de Presentación -->
-            <div class="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-brand-border bg-slate-900 group">
-                <img
-                    src="/lab-mainpic.jpg"
-                    alt="Laboratorio de Materiales UNET"
-                    class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 flex items-end p-6 sm:p-10">
+                <div class="flex flex-wrap items-center gap-4 pt-2">
                     <a
                         href="/materiales"
                         class="inline-flex items-center gap-2 px-5 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
@@ -81,10 +63,12 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
 
         <!-- Explora los Materiales -->
         <section class="space-y-6">
-            <div class="flex items-center justify-between pb-3 border-b border-brand-border">
-                <h2 class="text-2xl font-bold text-brand-dark tracking-tight">
-                    Materiales Destacados
-                </h2>
+            <div class="flex items-end justify-between pb-3 border-b border-brand-border">
+                <div class="space-y-1">
+                    <h2 class="text-2xl font-bold tracking-tight">
+                        Materiales Destacados
+                    </h2>
+                </div>
                 <a
                     href="/materiales"
                     class="text-xs font-semibold text-brand-primary hover:underline flex items-center gap-1"
@@ -95,42 +79,50 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {materialesDestacados.map((item) => {
+                {materialesDestacados.map((item, i) => {
                     const imagenPrincipal =
                         item.imagenes[0] || "/materiales/material-default.jpg";
+                    const materialNum = String(i + 1).padStart(2, "0");
                     return (
                         <a
                             href={`/materiales/${item.slug}`}
-                            class="group bg-white rounded-xl border border-brand-border overflow-hidden hover:border-brand-primary/50 hover:shadow-md transition-all flex flex-col"
+                            class="group relative bg-white rounded-xl border border-brand-border overflow-hidden hover:border-brand-primary/50 hover:shadow-md transition-all flex flex-col"
                         >
-                            <div class="h-44 w-full bg-slate-100 overflow-hidden">
+                            <div class="h-56 w-full bg-slate-100 overflow-hidden relative">
                                 <img
                                     src={imagenPrincipal}
                                     alt={item.nombre}
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
+                                <span class="absolute top-3 left-3 text-xs font-mono font-bold text-white/90 bg-brand-dark/70 px-2 py-0.5 rounded">
+                                    Material {materialNum}
+                                </span>
                             </div>
 
                             <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
                                 <div class="space-y-1">
-                                    <h3 class="text-lg font-bold text-brand-dark group-hover:text-brand-primary transition-colors">
+                                    <h3 class="text-lg font-bold text-brand-primary group-hover:text-brand-primary-hover transition-colors">
                                         {item.nombre}
                                     </h3>
-                                    <p class="text-xs text-brand-muted font-mono font-medium">
+                                    <p class="text-sm text-brand-muted font-mono font-medium">
                                         {item.tipo_material || "Acero"}
                                     </p>
                                 </div>
 
-                                <div class="pt-3 border-t border-brand-border flex items-center justify-between text-xs text-brand-body font-medium">
+                                <div class="pt-3 border-t border-brand-border flex items-center justify-between text-sm text-brand-body font-medium">
                                     <span>
                                         Dureza:{" "}
                                         {item.dureza_max_recocido_hb || "N/A"}
                                     </span>
-                                    <span class="text-brand-primary group-hover:translate-x-1 transition-transform">
-                                        Ver Ficha &rarr;
+                                    <span class="text-brand-primary group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                        Ver Ficha{" "}
+                                        <span aria-hidden="true">&rarr;</span>
                                     </span>
                                 </div>
                             </div>
+
+                            <!-- Línea azul inferior progresiva -->
+                            <span class="absolute bottom-0 left-0 h-0.5 w-0 bg-brand-primary group-hover:w-full transition-all duration-300"></span>
                         </a>
                     );
                 })}
@@ -138,42 +130,48 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
         </section>
 
         <!-- Pilares de la Plataforma -->
-        <section class="space-y-6">
+        <section class="space-y-4">
             <div class="text-center max-w mx-auto space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight">
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">
                     ¿Qué te ofrece esta plataforma?
                 </h2>
-                <p class="text-sm text-brand-body">
-                    Herramientas diseñadas para potenciar las prácticas de
-                    ingeniería en aula y laboratorio.
+                <p class="text-base text-brand-body">
+                    Del análisis de las propiedades del material a la
+                    comprensión de sus procesos y aplicaciones.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
                 <!-- Pillar 1 -->
-                <div class="bg-white rounded-xl border border-brand-border p-6 space-y-4 flex flex-col justify-between">
+                <div class="group bg-white rounded-xl border border-brand-border p-6 space-y-4 flex flex-col justify-between hover:border-brand-primary/50 transition-colors">
                     <div class="space-y-3">
-                        <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                ></path>
-                            </svg>
+                        <div class="flex items-start justify-between">
+                            <div class="w-20 h-20 rounded-xl bg-slate-100 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary/10 transition-colors">
+                                <svg
+                                    class="w-10 h-10"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-brand-primary/40">
+                                01
+                            </span>
                         </div>
-                        <h3 class="text-base font-bold text-brand-dark">
+                        <h3 class="text-xl font-bold">
                             Especificaciones Técnicas
                         </h3>
-                        <p class="text-xs text-brand-body leading-relaxed">
-                            Información detallada de cada acero, incluyendo su
-                            composición química, dureza y tratamiento térmico.
+                        <p class="text-brand-body leading-relaxed">
+                            Información técnica de algunos aceros, incluyendo
+                            composición, variables para tratamientos térmicos y
+                            aplicaciones.
                         </p>
                     </div>
                     <a
@@ -185,27 +183,30 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
                 </div>
 
                 <!-- Pillar 2 -->
-                <div class="bg-white rounded-xl border border-brand-border p-6 space-y-4 flex flex-col justify-between">
+                <div class="group bg-white rounded-xl border border-brand-border p-6 space-y-4 flex flex-col justify-between hover:border-brand-primary/50 transition-colors">
                     <div class="space-y-3">
-                        <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-brand-primary">
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                                ></path>
-                            </svg>
+                        <div class="flex items-start justify-between">
+                            <div class="w-20 h-20 rounded-xl bg-slate-100 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary/10 transition-colors">
+                                <svg
+                                    class="w-10 h-10"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-brand-primary/40">
+                                02
+                            </span>
                         </div>
-                        <h3 class="text-base font-bold text-brand-dark">
-                            Recursos Multimedia
-                        </h3>
-                        <p class="text-xs text-brand-body leading-relaxed">
+                        <h3 class="text-xl font-bold">Recursos Multimedia</h3>
+                        <p class="text-brand-body leading-relaxed">
                             Accede a vídeos explicativos y recursos prácticos
                             asociados a los ensayos de cada probeta del
                             muestrario.
@@ -222,29 +223,30 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
         </section>
 
         <!-- Sobre el Laboratorio UNET -->
-        <section class="bg-white rounded-xl border border-brand-border overflow-hidden">
+        <section class="bg-white rounded-xl border border-brand-border overflow-hidden group mb-6">
             <div class="grid grid-cols-1 lg:grid-cols-12 items-center">
                 <div class="p-8 sm:p-10 lg:col-span-6 space-y-4">
                     <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
                         Sótano Edificio C
                     </span>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight">
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">
                         Laboratorio de Materiales
                     </h2>
-                    <p class="text-sm text-brand-body leading-relaxed">
-                        Ubicado en el Sótano del Edificio C, este es el núcleo
-                        donde se resguardan las probetas y muestras físicas.
-                        Esta plataforma digital actúa como una extensión de
-                        nuestro laboratorio, permitiendo que el conocimiento
-                        técnico trascienda las paredes de la universidad.
+                    <p class="text-base text-brand-body leading-relaxed">
+                        Ubicado en el piso más bajo del Edificio C, este es el
+                        núcleo donde se resguardan las probetas y muestras
+                        físicas. Esta plataforma digital actúa como una
+                        extensión de nuestro laboratorio, permitiendo que el
+                        conocimiento técnico trascienda las paredes de la
+                        universidad.
                     </p>
                 </div>
 
-                <div class="lg:col-span-6 h-100 min-h-[250px] bg-slate-100 relative">
+                <div class="lg:col-span-6 h-100 min-h-[250px] bg-slate-100 relative overflow-hidden">
                     <img
                         src="/edificioC.jpeg"
                         alt="Muestras del Laboratorio UNET"
-                        class="w-full h-full object-cover"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                 </div>
             </div>
@@ -253,29 +255,35 @@ const materialesDestacados = getAllMateriales().slice(0, 3);
 </Layout>
 
 <script>
-    const btnDescargarHome = document.getElementById("btn-descargar-qr-home");
-
-    btnDescargarHome?.addEventListener("click", async () => {
-        const QRCode = (await import("qrcode")).default;
-        const currentUrl = window.location.href;
-        const nombreMaterial =
-            btnDescargarHome.getAttribute("data-material-nombre") || "QR";
-
-        try {
-            const qrDataUrl = await QRCode.toDataURL(currentUrl, {
-                width: 1000,
-                margin: 2,
-                color: { dark: "#000000", light: "#ffffff" },
+    // Animaciones de aparición (fade-up) con IntersectionObserver
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animate-fade-up");
+                    observer.unobserve(entry.target);
+                }
             });
+        },
+        { threshold: 0.1 },
+    );
 
-            const link = document.createElement("a");
-            link.href = qrDataUrl;
-            link.download = `QR-${nombreMaterial.replace(/\s+/g, "-")}.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error("Error generando el código QR:", error);
+    document.querySelectorAll("section").forEach((section) => {
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            section.classList.add("opacity-0", "translate-y-4");
+            observer.observe(section);
         }
     });
 </script>
+
+<style>
+    @keyframes fade-up {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-up {
+        animation: fade-up 0.6s ease-out forwards;
+    }
+</style>
