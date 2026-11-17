@@ -17,6 +17,7 @@ export interface Material {
   slug: string;
   nombre: string;
   tipo_material: string | null;
+  identificacion_material: string | null;
   codigo_color_ferrum: string | null;
   composicion_quimica: string | null;
   dureza_max_recocido_hb: string | null;
