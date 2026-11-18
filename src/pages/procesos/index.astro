@@ -1,9 +1,231 @@
 ---
-import Welcome from "../../components/Welcome.astro";
 import Layout from "../../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const videosProcesos = [
+    { id: "5pvUDJqiz0I", titulo: "Preparación Metalográfica" },
+    { id: "0a4XaQ5YGs0", titulo: "Proceso Metalográfico" },
+    { id: "K_95Xl789kE", titulo: "Análisis Metalográfico" },
+];
+
+const avatares = [
+    { nombre: "Ingeniero Daniel C.", imagen: "/danielc.png" },
+    { nombre: "Ingeniera Genesis C.", imagen: "/genesisl.png" },
+];
 ---
 
-<Layout />
+<Layout title="Procesos — Muestrario Metalográfico Digital">
+    <div class="space-y-16 sm:space-y-24 py-4">
+        <section class="space-y-4 text-center max-w-3xl mx-auto pt-10 mb-0">
+            <span class="text-xs font-mono font-bold text-brand-primary uppercase tracking-wider">
+                Laboratorio L051 — UNET
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight">
+                Procesos del Laboratorio de Materiales
+            </h1>
+            <p class="text-base text-brand-body leading-relaxed">
+                En esta sección se presentan los procedimientos realizados en el
+                Laboratorio de Materiales para la caracterización de las
+                probetas de acero. Cada video documenta una etapa clave del
+                proceso metalográfico: desde la preparación inicial de la
+                muestra hasta el análisis de su microestructura, pasando por el
+                corte, montaje, desbaste, pulido y ataque químico. Estos
+                recursos complementan la información técnica del muestrario
+                digital y sirven como apoyo visual para las prácticas de
+                laboratorio.
+            </p>
+        </section>
+
+        <section class="flex flex-wrap justify-center gap-10 sm:gap-16">
+            {avatares.map((avatar) => (
+                <div class="flex flex-col items-center space-y-3">
+                    <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden border-2 border-brand-border shadow-sm">
+                        <img
+                            src={avatar.imagen}
+                            alt={avatar.nombre}
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <p class="text-sm font-semibold text-brand-dark text-center">
+                        {avatar.nombre}
+                    </p>
+                </div>
+            ))}
+        </section>
+
+        <section class="space-y-6">
+            <div class="space-y-3">
+                <h2 class="text-2xl font-bold text-brand-dark tracking-tight">
+                    Procesos del Laboratorio
+                </h2>
+                <div class="h-px w-full bg-brand-border"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {videosProcesos.map((video, i) => (
+                    <button
+                        type="button"
+                        class="video-thumb group relative bg-white rounded-xl border border-brand-border overflow-hidden hover:border-brand-primary/50 hover:shadow-md transition-all cursor-pointer"
+                        data-video-id={video.id}
+                        data-video-index={i}
+                    >
+                        <div class="relative w-full aspect-video bg-slate-900">
+                            <img
+                                src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                                alt={video.titulo}
+                                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                            />
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-14 h-14 rounded-full bg-white/90 group-hover:bg-white flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
+                                    <svg
+                                        class="w-6 h-6 text-brand-primary ml-0.5"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M8 5v14l11-7z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                ))}
+            </div>
+        </section>
+
+        <div class="h-16"></div>
+    </div>
+
+    <div
+        id="video-lightbox"
+        class="fixed inset-0 z-50 bg-black/95 hidden items-center justify-center p-4"
+    >
+        <button
+            type="button"
+            id="video-lightbox-close"
+            class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer z-10"
+            aria-label="Cerrar"
+        >
+            <svg
+                class="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                ></path>
+            </svg>
+        </button>
+
+        <div class="w-full max-w-5xl space-y-4">
+            <div class="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+                <iframe
+                    id="video-lightbox-iframe"
+                    src=""
+                    class="w-full h-full"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            <div class="flex justify-center gap-2" id="video-pagination">
+                {videosProcesos.map((_, i) => (
+                    <button
+                        type="button"
+                        class="video-pag-btn w-8 h-8 rounded-full text-xs font-bold transition-colors cursor-pointer"
+                        data-video-pag={i}
+                        aria-label={`Ir al video ${i + 1}`}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    const videos = ["5pvUDJqiz0I", "0a4XaQ5YGs0", "K_95Xl789kE"];
+
+    const lightbox = document.getElementById(
+        "video-lightbox",
+    ) as HTMLElement | null;
+    const iframe = document.getElementById(
+        "video-lightbox-iframe",
+    ) as HTMLIFrameElement | null;
+    const btnClose = document.getElementById("video-lightbox-close");
+    const pagBtns = document.querySelectorAll("[data-video-pag]");
+    const thumbs = document.querySelectorAll("[data-video-index]");
+
+    if (lightbox && iframe) {
+        let current = 0;
+
+        const abrir = (index: number) => {
+            current = index;
+            const id = videos[index];
+            // controls=0 oculta los controles. rel=0 evita videos relacionados.
+            // modestbranding=1 reduce la marca de YouTube.
+            iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&controls=0&iv_load_policy=3`;
+            lightbox.classList.remove("hidden");
+            lightbox.classList.add("flex");
+            document.body.style.overflow = "hidden";
+            actualizarPags();
+        };
+
+        const cerrar = () => {
+            iframe.src = "";
+            lightbox.classList.add("hidden");
+            lightbox.classList.remove("flex");
+            document.body.style.overflow = "";
+        };
+
+        const actualizarPags = () => {
+            pagBtns.forEach((btn, i) => {
+                const el = btn as HTMLElement;
+                const active = i === current;
+                el.classList.toggle("bg-brand-primary", active);
+                el.classList.toggle("text-white", active);
+                el.classList.toggle("bg-white/20", !active);
+                el.classList.toggle("text-white/70", !active);
+            });
+        };
+
+        thumbs.forEach((thumb) => {
+            thumb.addEventListener("click", () => {
+                const index = parseInt(
+                    (thumb as HTMLElement).getAttribute("data-video-index") ||
+                        "0",
+                    10,
+                );
+                abrir(index);
+            });
+        });
+
+        pagBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const index = parseInt(
+                    (btn as HTMLElement).getAttribute("data-video-pag") || "0",
+                    10,
+                );
+                abrir(index);
+            });
+        });
+
+        btnClose?.addEventListener("click", cerrar);
+
+        lightbox.addEventListener("click", (e) => {
+            if (e.target === lightbox) cerrar();
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (lightbox.classList.contains("hidden")) return;
+            if (e.key === "Escape") cerrar();
+            if (e.key === "ArrowRight") abrir((current + 1) % videos.length);
+            if (e.key === "ArrowLeft")
+                abrir((current - 1 + videos.length) % videos.length);
+        });
+    }
+</script>
